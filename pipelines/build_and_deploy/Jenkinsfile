@@ -34,7 +34,7 @@ pipeline {
     }
 
     environment {
-        BITBUCKET_CREDENTIALS_ID = 'ssh-bitbucket-infra-ro'
+        BITBUCKET_CREDENTIALS_ID = 'gh-deploy-key'
         CRED_CICD = credentials('cicd_server')
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
