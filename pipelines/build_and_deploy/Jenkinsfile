@@ -27,7 +27,7 @@ pipeline {
         string(name: 'PACKAGE_PATH', defaultValue: 'D:/Artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
         string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
         string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
-        string(name: 'MYTA_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
+        string(name: 'PLASTICSCM_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
         string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main', description: 'PlasticSCM Branch.')
         string(name: 'SERVER_BUILD_FLAGS', defaultValue: '-build -cook -package -stage -archive -pak -allmaps -server -noclient -target=MytaverseServer')
         string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52/', description: 'Viktor to add description for this variable')
@@ -65,7 +65,7 @@ pipeline {
                 script {
                     plasticVars = cm(
                         branch:         "${params:PLASTICSCM_BRANCH}",
-                        changeset:      "${env:MYTA_CHANGESET}",
+                        changeset:      "${env:PLASTICSCM_CHANGESET}",
                         cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
                         changelog:      true,
                         credentialsId:  "${env.GIT_CREDENTIALS_ID}",
