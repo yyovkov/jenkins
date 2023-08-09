@@ -1,0 +1,210 @@
+// Pipeline Build and Deploy Server and Clients
+@Library('mytaverse') _
+
+pipeline {
+
+    agent {
+        label "_mytaverse && windows"
+    }
+
+    options {
+        timestamps()
+        parallelsAlwaysFailFast()
+    }
+
+    parameters {
+        booleanParam(name: 'BUILD_LINUX_SERVER', defaultValue: true, description: 'Use Linux for server')
+        booleanParam(name: 'ENABLE_CLIENT_GAMECAST', defaultValue: false, description: 'Build and deploy GameCast client')
+        booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: true, description: 'Build and deploy PureWeb client')
+        // 
+        choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.2xlarge', 'c5.xlarge', 'c5.large'])
+        choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
+        choice(name: 'SERVER_CONFIG', choices: ['Development', 'Shipping'])
+        choice(name: 'TARGET_CONNECTION', choices: ['CC_Dev', 'CC_Prod'])
+        // 
+        string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region to which the build will be deployed')
+        string(name: 'BUILD_DIR', defaultValue: 'D:/Projects/Mytaverse/PlasticSCM', description: 'Directory in which the PlasticSCM code is checked out and where the build are triggered out from.')
+        string(name: 'PACKAGE_PATH', defaultValue: 'D:/Artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
+        string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
+        string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
+        string(name: 'MYTA_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
+        string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main', description: 'PlasticSCM Branch.')
+        string(name: 'SERVER_BUILD_FLAGS', defaultValue: '-build -cook -package -stage -archive -pak -allmaps -server -noclient -target=MytaverseServer')
+        string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52/', description: 'Viktor to add description for this variable')
+    }
+
+    environment {
+        BITBUCKET_CREDENTIALS_ID = 'ssh-bitbucket-infra-ro'
+        CRED_CICD = credentials('cicd_server')
+        OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
+        PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
+        PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
+        PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
+        PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject'
+        UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
+    }
+
+    stages {
+        stage("Send slack notification") {
+            steps {
+                echo "Sending slack notification"
+            }
+        }
+
+        stage('Checkout PlasticSCM'){
+            steps {
+                // TODO: Define ChangeSet
+                // Consider whether the step should be here or as part of the
+                // PlasticSCM library
+                echo "TODO: Resolve the latest-stable mess made by .net"
+                echo "Defining Changeset Number"
+                echo "File: ue5-pipelines/parallel/Jenkinsfile"
+                echo "Pipeline name: DevGit "
+                echo "Invoke pipeline: 'GetLatestStable'"
+
+                script {
+                    plasticVars = cm(
+                        branch:         "${params:PLASTICSCM_BRANCH}",
+                        changeset:      "${env:MYTA_CHANGESET}",
+                        cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
+                        changelog:      true,
+                        credentialsId:  "${env.BITBUCKET_CREDENTIALS_ID}",
+                        poll:           false,
+                        repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
+                        server:         "${env.PLASTICSCM_TARGET_SERVER}",
+                        workingMode:    "LDAP",
+                        // directory:      "${params:BUILD_DIR}"
+                        directory:      "${env.PLASTICSCM_TARGET_REPOSITORY}"
+                    )
+
+                    env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
+                    env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
+                    env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+                }
+                powershell "dir env:"
+            }
+        }
+
+        stage('Setup dynamic environment') {
+            steps {
+                script {
+                    // Setup SENTRY_URL bassed on TARGET_CONNECTION parameter
+                    switch(params.TARGET_CONNECTION) {
+                        case 'CC_Prod':
+                            env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
+                            break
+                        case 'CC_Dev':
+                            env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
+                            break
+                        default:
+                            env.SENTRY_URL = "not_setup"
+                            break
+                    }
+                    switch(params.CHANGESET_TYPE) {
+                        case 'latest-stable':
+                            // execute code to define latest stable
+                            bat "dir"
+                            break
+                        default:
+                            break
+                    }
+                }
+            }
+        }
+
+        stage("Building and Deploy Server and Clients") {
+            parallel {
+                stage('Server GameLift Build and Deploy') {
+                    stages {
+                        stage('Server GameLift Build') {
+                            steps {
+                                echo "Server GameLift Build"
+                                echo "Currently invoke external Pipeline - 'GameLift'"
+                                echo "TODO: Should setup: serverPlasticChangeSet"
+                                // New  Code
+                                echo "Server GameLift Build"
+                                echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
+                                echo "PLATFORM: ${env.OPERATING_SYSTEM}"
+                                dir("${params.BUILD_DIR}"){
+                                    gameliftBuild()
+                                }
+                            }
+                        }
+                        // stage('Copy Build') {
+                        //     when {
+                        //         expression {return params.BUILD_LINUX_SERVER}
+                        //     }
+                        //     steps {
+                        //         bat """
+                        //             XCopy "%BUILD_DIR%\\Build\\WindowsServer" "%PACKAGE_PATH%\\%BUILD_NUMBER%\\WindowsServer" /E /H /C /I
+                        //         """
+                        //     }
+                        // }
+                        stage('Server GameLift Deploy'){
+                            steps {
+                                gameliftDeploy()
+                            }
+                        }
+                    }
+                }
+                stage('Client GameCast Build and Deploy') {
+                    when {
+                        expression {params.ENABLE_CLIENT_GAMECAST == true}
+                    }
+                    stages {
+                        stage('Client GameCast Build') {
+                            steps {
+                                echo "Deploy Client GameCast"
+                                echo "Currently invoke external Pipeline - 'GameCast'"
+                                gamecastBuild()
+                            }
+                        }
+                        stage('Client GameCast Deploy') {
+                            steps {
+                                gamecastDeploy()
+                            }
+                        }
+                    }
+                }
+
+                stage('Client PureWeb Build and Deploy') {
+                    when {
+                        expression {params.ENABLE_CLIENT_PUREWEB == true}
+                    }
+                    stages {
+                        stage('Client Pureweb Build') {
+                            steps {
+                                echo "Deploy Client PureWeb"
+                                echo "Currently stage 'Client Plastic clone PureWeb'"
+                                echo "Currently stage 'Build Pure Web'"
+                                echo "Currently stage 'Define Zip name'"
+                                echo "Currently stage 'ZiP artifacts'"
+                                echo "Currently invoke external Pipeline - 'Pure Web'"
+                                purewebBuild()
+                            }
+                        }
+                        stage('Client Pureweb Deploy') {
+                            steps {
+                                purewebDeploy()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    post {
+        always {
+            echo "Pipeline Finished."
+        }
+        
+        success {
+            echo "Finished successfully."
+        }
+
+        failure {
+            echo "Failed."
+        }
+    }
+}

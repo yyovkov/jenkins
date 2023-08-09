@@ -1,0 +1,64 @@
+// BUILD_DIR = C:\UE_Source\UE_5.1
+// GIT_BRANCH = release
+// MS_BUILD_PATH = C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
+// UE_PLATFORM = Win64
+// CONFIGURATION = Development Editor
+// VERBOSITY = diagnostic 
+
+pipeline {
+    agent {
+        node {
+            label "general"
+            customWorkspace "$BUILD_DIR"
+        }
+    }
+
+    stages {
+        stage('Git clone') {
+            steps {
+                checkout([$class: 'GitSCM',
+                    branches: [[name: "$GIT_BRANCH"]],
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout'],
+                        [$class: 'CloneOption', timeout: 240]
+                    ],
+                    userRemoteConfigs: [
+                        [credentialsId: "github_token", url: "https://github.com/EpicGames/UnrealEngine"]]
+                    ])
+            }
+        }
+        stage('Setup.bat') {
+             steps {
+             bat '''
+                    "%BUILD_DIR%\\Setup.bat" --force
+                '''
+            }
+        }
+        
+        stage('GenerateProjectFiles.bat') {
+            steps {
+                
+                bat '''
+                   where dotnet 
+                   "%BUILD_DIR%\\GenerateProjectFiles.bat" -2022
+                '''
+            }
+        }
+        stage('restore packages') {
+            steps {
+                bat '''
+                   "%MS_BUILD_PATH%" /t:restore
+                '''
+            }
+        }
+        stage('Build Engine') {
+            steps {
+                bat '''
+                  "%MS_BUILD_PATH%" "%BUILD_DIR%\\UE5.sln" -target:"Engine\\UE5" -property:Platform="%UE_PLATFORM%";Configuration="%CONFIGURATION%" -verbosity:"%VERBOSITY%"
+                '''
+            }
+        }
+    }
+
+ 
+}
