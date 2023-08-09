@@ -34,7 +34,7 @@ pipeline {
     }
 
     environment {
-        BITBUCKET_CREDENTIALS_ID = 'gh-deploy-key'
+        GIT_CREDENTIALS_ID = 'gh-deploy-key'
         CRED_CICD = credentials('cicd_server')
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
@@ -68,7 +68,7 @@ pipeline {
                         changeset:      "${env:MYTA_CHANGESET}",
                         cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
                         changelog:      true,
-                        credentialsId:  "${env.BITBUCKET_CREDENTIALS_ID}",
+                        credentialsId:  "${env.GIT_CREDENTIALS_ID}",
                         poll:           false,
                         repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
                         server:         "${env.PLASTICSCM_TARGET_SERVER}",
