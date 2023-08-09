@@ -43,9 +43,9 @@ export JOB_FOLDER="mytaverse"
 export JOB_NAME=build_and_deploy
 export JOB_SLOGAN="Build and Deploy UE5"
 export JOB_DESCRIPTION="Build and Deploy UE5"
-export GIT_REPO="git@bitbucket.org:gathr1/test_jenkins.git"
-export GIT_BRANCH='*/yovko/initial-branch'
-export GIT_CREDENTIALS="ssh-bitbucket-infra-ro"
+export GIT_REPO="git@github.com:yyovkov/jenkins.git"
+export GIT_BRANCH="*/develop"
+export GIT_CREDENTIALS="gh-deploy-key"
 export PATH_JENKINSFILE="pipelines/build_and_deploy/Jenkinsfile"
 ```
 
