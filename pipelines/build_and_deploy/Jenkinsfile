@@ -41,6 +41,7 @@ pipeline {
         PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
         PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
         // PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject' // Not needed for now
+        PROJECT_PATH = "${env.PLASTICSCM_TARGET_REPOSITORY}" + '/Mytaverse.uproject' // Not needed for now
         UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
     }
 
