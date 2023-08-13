@@ -23,7 +23,7 @@ pipeline {
         choice(name: 'TARGET_CONNECTION', choices: ['CC_Dev', 'CC_Prod'])
         // 
         string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region to which the build will be deployed')
-        string(name: 'BUILD_DIR', defaultValue: 'D:/Projects/Mytaverse/PlasticSCM', description: 'Directory in which the PlasticSCM code is checked out and where the build are triggered out from.')
+        // string(name: 'BUILD_DIR', defaultValue: 'D:/Projects/Mytaverse/PlasticSCM', description: 'Directory in which the PlasticSCM code is checked out and where the build are triggered out from.') // Not needed for now
         string(name: 'PACKAGE_PATH', defaultValue: 'D:/Artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
         string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
         string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
@@ -40,7 +40,7 @@ pipeline {
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
         PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
         PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
-        PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject'
+        // PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject' // Not needed for now
         UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
     }
 
