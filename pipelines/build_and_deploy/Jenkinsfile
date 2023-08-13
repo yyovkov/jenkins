@@ -40,8 +40,9 @@ pipeline {
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
         PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
         PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
+        PLASTICSCM_LOCAL_PATH = "${env.WORKSPACE}/${env.PLASTICSCM_TARGET_REPOSITORY}"
         // PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject' // Not needed for now
-        PROJECT_PATH = "${env.PLASTICSCM_TARGET_REPOSITORY}" + '/Mytaverse.uproject' // Not needed for now
+        PROJECT_PATH = "${env.PLASTICSCM_LOCAL_PATH}" + '/Mytaverse.uproject'
         UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
     }
 
@@ -75,7 +76,7 @@ pipeline {
                         server:         "${env.PLASTICSCM_TARGET_SERVER}",
                         workingMode:    "LDAP",
                         // directory:      "${params:BUILD_DIR}"
-                        directory:      "${env.PLASTICSCM_TARGET_REPOSITORY}"
+                        directory:      "${env.PLASTICSCM_LOCAL_PATH}"
                     )
 
                     env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
@@ -126,7 +127,7 @@ pipeline {
                                 echo "Server GameLift Build"
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.OPERATING_SYSTEM}"
-                                dir("${env.PLASTICSCM_TARGET_REPOSITORY}"){
+                                dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     gameliftBuild()
                                 }
                             }
