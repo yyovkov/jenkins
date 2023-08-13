@@ -125,7 +125,7 @@ pipeline {
                                 echo "Server GameLift Build"
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.OPERATING_SYSTEM}"
-                                dir("${params.BUILD_DIR}"){
+                                dir("${env.PLASTICSCM_TARGET_REPOSITORY}"){
                                     gameliftBuild()
                                 }
                             }
