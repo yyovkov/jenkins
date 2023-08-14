@@ -142,15 +142,16 @@ pipeline {
                         // }
                         stage('Copy Build') {
                             when {
-                                expression  {params.BUILD_LINUX_SERVER == true}
+                                // Should be run when building Winddowse Version Only
+                                // expression  {params.BUILD_LINUX_SERVER == false}
+                                expression  {params.BUILD_LINUX_SERVER == false}
                             }
                             steps {
                                 powershell '''
                                     Write-Host Start Copying Build
-                                    $buildSourceDir = Join-Path $env:PLASTICSCM_LOCAL_PATH `
-                                        | Join-Path -ChildPath "Build" `
-                                        | Join-Path -ChildPath "WindowsServer"
-                                    Write-Host Source $env:buildSourceDir
+                                    $buildSourceDir = Join-Path $env:PLASTICSCM_LOCAL_PATH Build `
+                                        | Join-Path -ChildPath WindowsServer
+                                    Write-Host Source $buildSourceDir
                                 '''
                             }
                         }
