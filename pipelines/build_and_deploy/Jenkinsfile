@@ -140,11 +140,11 @@ pipeline {
                         //         """
                         //     }
                         // }
-                        stage('Copy Build') {
+                        stage('Copy to AWS build folder') {
                             when {
                                 // Should be run when building Winddowse Version Only
                                 // expression  {params.BUILD_LINUX_SERVER == false}
-                                expression  {params.BUILD_LINUX_SERVER == false}
+                                expression  {params.BUILD_LINUX_SERVER == true}
                             }
                             steps {
                                 powershell '''
