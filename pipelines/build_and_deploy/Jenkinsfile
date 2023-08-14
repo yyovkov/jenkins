@@ -144,10 +144,12 @@ pipeline {
                             when {
                                 expression  {param.BUILD_LINUX_SERVER == true}
                             }
-                            powershell '''
-                                Write-Host Start Copying Build
-                                Write-Host Source ${env.PLASTICSCM_LOCAL_PATH}
-                            '''
+                            steps {
+                                powershell '''
+                                    Write-Host Start Copying Build
+                                    Write-Host Source ${env.PLASTICSCM_LOCAL_PATH}
+                                '''
+                            }
                         }
                         stage('Server GameLift Deploy'){
                             steps {
