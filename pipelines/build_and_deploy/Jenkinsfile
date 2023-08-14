@@ -147,7 +147,10 @@ pipeline {
                             steps {
                                 powershell '''
                                     Write-Host Start Copying Build
-                                    Write-Host Source $env:PLASTICSCM_LOCAL_PATH
+                                    $buildSourceDir = Join-Path $env:PLASTICSCM_LOCAL_PATH `
+                                        | Join-Path -ChildPath "Build" `
+                                        | Join-Path -ChildPath "WindowsServer"
+                                    Write-Host Source $env:buildSourceDir
                                 '''
                             }
                         }
