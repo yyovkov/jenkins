@@ -29,7 +29,7 @@ pipeline {
         string(name: 'PLASTICSCM_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
         string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main/TourLabs', description: 'PlasticSCM Branch.')
         string(name: 'SERVER_BUILD_FLAGS', defaultValue: '-build -cook -package -stage -archive -pak -allmaps -server -noclient -target=MytaverseServer')
-        string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52/', description: 'Viktor to add description for this variable')
+        string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52', description: 'Viktor to add description for this variable')
     }
 
     environment {
@@ -123,7 +123,7 @@ pipeline {
                                 // New  Code
                                 echo "Server GameLift Build"
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
-                                echo "PLATFORM: ${env.OPERATING_SYSTEM}"
+                                echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     gameliftBuild()
                                 }
