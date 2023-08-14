@@ -142,7 +142,7 @@ pipeline {
                         // }
                         stage('Copy Build') {
                             when {
-                                expression  {param.BUILD_LINUX_SERVER == true}
+                                expression  {params.BUILD_LINUX_SERVER == true}
                             }
                             steps {
                                 powershell '''
