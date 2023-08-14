@@ -147,7 +147,7 @@ pipeline {
                             steps {
                                 powershell '''
                                     Write-Host Start Copying Build
-                                    Write-Host Source ${env.PLASTICSCM_LOCAL_PATH}
+                                    Write-Host Source $env:PLASTICSCM_LOCAL_PATH
                                 '''
                             }
                         }
