@@ -151,13 +151,15 @@ pipeline {
                             }
                             steps {
                                 powershell '''
-                                    Write-Host Start Copying Build
                                     $buildSourceDir = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Build `
                                         | Join-Path -ChildPath WindowsServer
-                                    Write-Host Source $buildSourceDir
                                     $buildDestDir = Join-Path ${env:PACKAGE_PATH} ${env:BUILD_NUMBER} `
                                         | Join-Path -ChildPath WindowsServer
+                                    Write-Host Start Copying Build
+                                    Write-Host Source $buildSourceDir
                                     Write-Host Destination $buildDestDir
+                                    $XCopyCmd = XCopy $buildSourceDir $buildDestDir /E /H /C /I
+                                    Write-Host XCopy Command $XCopyCmd
                                 '''
                             }
                         }
