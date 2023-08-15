@@ -35,7 +35,7 @@ pipeline {
 
     environment {
         GIT_CREDENTIALS_ID = 'gh-deploy-key'
-        DEV_AWS_BUILD_ACCESS = 'aws-jenkins-dev'
+        DEV_AWS_BUILD_ACCESS = credentials('aws-jenkins-dev')
         CRED_CICD = credentials('cicd_server')
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
