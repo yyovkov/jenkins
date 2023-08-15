@@ -137,7 +137,7 @@ pipeline {
                         }
                         stage('Copy Build to AWS Build folder') {
                             when {
-                                expression  {params.BUILD_LINUX_SERVER == true}
+                                expression  {params.BUILD_LINUX_SERVER == false }
                             }
                             steps {
                                 powershell '''
@@ -158,13 +158,13 @@ pipeline {
                                     dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                         powershell '''
                                             Write-Host Here should be Clean Fleets
-                                            // $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+                                            # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                             
-                                            // %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
+                                            # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
-                                            // $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                            # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
 
-                                            // $cmdCleanFleet = 
+                                            # $cmdCleanFleet = 
                                     '''
                                     }
                                 }
@@ -179,7 +179,7 @@ pipeline {
                 }
                 stage('Client GameCast Build and Deploy') {
                     when {
-                        expression {params.ENABLE_CLIENT_GAMECAST == false}
+                        expression {params.ENABLE_CLIENT_GAMECAST == true }
                     }
                     stages {
                         stage('Client GameCast Build') {
