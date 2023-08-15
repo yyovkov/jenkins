@@ -161,9 +161,9 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    dir("${env:PLASTICSCM_LOCAL_PATH}") {
-                                        withCredentials(credentials:"${env.AWS_CREDENTIALS_ID}") {
-                                            powershell 'dir env:'
+                                    withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                                        powershell 'dir env:'
+                                        dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
                                                 $cwd = Get-Location
 
