@@ -92,11 +92,11 @@ pipeline {
                     switch(params.TARGET_CONNECTION) {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
-                            env.AWS_CREDENTIALS_ID = credentials('aws-jenkins-prod')
+                            evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-prod'
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
-                            AWS_CREDENTIALS_ID = credentials('aws-jenkins-dev')
+                            evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-dev'
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
@@ -161,28 +161,30 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    powershell 'dir env:'
-                                    dir("${env:PLASTICSCM_LOCAL_PATH}") {
-                                        powershell '''
-                                            $cwd = Get-Location
+                                    withCredentials([usernamePassword(${env.AWS_DEPLOY_CREDENTIALS})]) {
+                                        powershell 'dir env:'
+                                        dir("${env:PLASTICSCM_LOCAL_PATH}") {
+                                            powershell '''
+                                                $cwd = Get-Location
 
-                                            # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
-                                            $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
-                                                | Join-Path -ChildPath aws `
-                                                | Join-Path -ChildPath AWSHelper.exe
+                                                # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                    | Join-Path -ChildPath aws `
+                                                    | Join-Path -ChildPath AWSHelper.exe
 
-                                            
-                                            # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
+                                                
+                                                # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
-                                            # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
-                                            $cmdFleetCmd = "& $cleanFleetExe"
+                                                # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                                $cmdFleetCmd = "& $cleanFleetExe"
 
-                                            # $cmdCleanFleet = 
+                                                # $cmdCleanFleet = 
 
-                                            Write-Host Here should be Clean Fleets
-                                            Write-Host "Current Location is: $cwd"
-                                            Write-Host "Clean Fleets Command: $cmdFleetCmd"
-                                        '''
+                                                Write-Host Here should be Clean Fleets
+                                                Write-Host "Current Location is: $cwd"
+                                                Write-Host "Clean Fleets Command: $cmdFleetCmd"
+                                            '''
+                                        }
                                     }
                                 }
                             }
