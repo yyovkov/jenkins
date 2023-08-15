@@ -103,8 +103,8 @@ pipeline {
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
                             withCredentials([aws(
                                         credentialsId:'aws-jenkins-dev', 
-                                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]){
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]){
                                 env.DEPLOY_AWS_ACCESS_KEY_ID = $AWS_ACCESS_KEY_ID
                                 env.DEPLOY_AWS_SECRET_ACCESS_KEY = $AWS_SECRET_ACCESS_KEY
                             }
