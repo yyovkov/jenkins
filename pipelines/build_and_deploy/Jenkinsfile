@@ -164,7 +164,6 @@ pipeline {
                                                     credentialsId: env.AWS_DEPLOY_CREDENTIALS,
                                                     accessKeyVariable: '_AWS_ACCESS_KEY_ID',
                                                     secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
-                                        powershell 'dir env:'
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
                                                 $cwd = Get-Location
@@ -176,9 +175,8 @@ pipeline {
                                                 
                                                 $cmdFleetCmd = "& $cleanFleetExe ${env:_AWS_ACCESS_KEY_ID} ${env:_AWS_SECRET_ACCESS_KEY} ${env:AWS_REGION}"
 
-                                                Write-Host Here should be Clean Fleets
-                                                Write-Host "Current Location is: $cwd"
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
+                                                # Invoke-Expression $cmdFleetCm
                                             '''
                                         }
                                     }
