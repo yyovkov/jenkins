@@ -112,9 +112,9 @@ pipeline {
                     }
                     // TODO: Print all variables for debugging reasons
                     // powershell "dir env:"
-                    // sh '''
-                    //  env
-                    // '''
+                    sh '''
+                     env
+                    '''
                 }
             }
         }
@@ -166,7 +166,7 @@ pipeline {
                                             # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                             $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
                                                 | Join-Path -ChildPath aws `
-                                                | Join-Path -ChildPath AWSHelper.exec
+                                                | Join-Path -ChildPath AWSHelper.exe
 
                                             
                                             # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
