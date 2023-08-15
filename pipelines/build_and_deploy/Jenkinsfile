@@ -172,9 +172,6 @@ pipeline {
                                                     | Join-Path -ChildPath AWSHelper.exe
 
                                                 
-                                                # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
-
-                                                # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
                                                 $cmdFleetCmd = "& $cleanFleetExe ${env:aws_key} ${env:aws_secret} ${params.AWS_REGION}"
 
                                                 Write-Host Here should be Clean Fleets
@@ -182,7 +179,7 @@ pipeline {
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
                                             '''
                                         }
-                                    // }
+                                    }
                                 }
                             }
                         }
