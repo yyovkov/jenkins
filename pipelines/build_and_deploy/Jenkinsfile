@@ -178,8 +178,7 @@ pipeline {
 
                                             Write-Host Here should be Clean Fleets
                                             Write-Host "Current Location is: $cwd"
-                                            Write-Host "Clean Fleets Command: "
-
+                                            Write-Host "Clean Fleets Command: $cmdFleetCmd"
                                     '''
                                     }
                                 }
