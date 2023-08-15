@@ -157,10 +157,8 @@ pipeline {
                                         | Join-Path -ChildPath WindowsServer
                                     $cmdXCopy = "& XCopy $buildSourceDir $buildDestDir /E /H /C /I"
 
-                                    Write-Host Start Copying Build
-                                    Write-Host Source: $buildSourceDir
-                                    Write-Host Destination: $buildDestDir
                                     Write-Host Command to copy build: $cmdXCopy
+                                    Invoke-Expression $cmdXCopy
                                 '''
                             }
                         }
