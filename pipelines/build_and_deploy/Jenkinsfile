@@ -158,6 +158,11 @@ pipeline {
                                     dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                         powershell '''
                                             Write-Host Here should be Clean Fleets
+
+                                            $cwd = Get-Location
+                                            Write-Host "Current Location is: $cwd"
+
+                                            
                                             # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                             
                                             # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
