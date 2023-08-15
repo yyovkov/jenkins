@@ -63,24 +63,25 @@ pipeline {
                 echo "Pipeline name: DevGit "
                 echo "Invoke pipeline: 'GetLatestStable'"
 
-                script {
-                    plasticVars = cm(
-                        branch:         "${params:PLASTICSCM_BRANCH}",
-                        changeset:      "${env:PLASTICSCM_CHANGESET}",
-                        cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
-                        changelog:      true,
-                        credentialsId:  "${env.GIT_CREDENTIALS_ID}",
-                        poll:           false,
-                        repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
-                        server:         "${env.PLASTICSCM_TARGET_SERVER}",
-                        workingMode:    "LDAP",
-                        directory:      "${env.PLASTICSCM_LOCAL_PATH}"
-                    )
+                // TODO: Uncomment
+                // script {
+                //     plasticVars = cm(
+                //         branch:         "${params:PLASTICSCM_BRANCH}",
+                //         changeset:      "${env:PLASTICSCM_CHANGESET}",
+                //         cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
+                //         changelog:      true,
+                //         credentialsId:  "${env.GIT_CREDENTIALS_ID}",
+                //         poll:           false,
+                //         repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
+                //         server:         "${env.PLASTICSCM_TARGET_SERVER}",
+                //         workingMode:    "LDAP",
+                //         directory:      "${env.PLASTICSCM_LOCAL_PATH}"
+                //     )
 
-                    env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
-                    env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
-                    env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
-                }
+                //     env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
+                //     env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
+                //     env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+                // }
                 powershell "dir env:"
             }
         }
