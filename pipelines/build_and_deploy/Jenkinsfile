@@ -158,7 +158,7 @@ pipeline {
                                     Write-Host Start Copying Build
                                     Write-Host Source $buildSourceDir
                                     Write-Host Destination $buildDestDir
-                                    $XCopyCmd = XCopy $buildSourceDir $buildDestDir /E /H /C /I
+                                    $XCopyCmd = & XCopy $buildSourceDir $buildDestDir /E /H /C /I
                                     Write-Host XCopy Command $XCopyCmd
                                 '''
                             }
