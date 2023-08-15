@@ -160,31 +160,29 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    // withCredentials([usernamePassword(${env.AWS_DEPLOY_CREDENTIALS}, usernameVariable: MY_AWS_ACCESS_KEY_ID, passwordVariable: AWS_SECRET_ACCESS_KEY)]) {
-                                        powershell 'dir env:'
-                                        dir("${env:PLASTICSCM_LOCAL_PATH}") {
-                                            powershell '''
-                                                $cwd = Get-Location
+                                    powershell 'dir env:'
+                                    dir("${env:PLASTICSCM_LOCAL_PATH}") {
+                                        powershell '''
+                                            $cwd = Get-Location
 
-                                                # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
-                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
-                                                    | Join-Path -ChildPath aws `
-                                                    | Join-Path -ChildPath AWSHelper.exe
+                                            # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+                                            $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                | Join-Path -ChildPath aws `
+                                                | Join-Path -ChildPath AWSHelper.exe
 
-                                                
-                                                # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
+                                            
+                                            # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
-                                                # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
-                                                $cmdFleetCmd = "& $cleanFleetExe"
+                                            # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                            $cmdFleetCmd = "& $cleanFleetExe"
 
-                                                # $cmdCleanFleet = 
+                                            # $cmdCleanFleet = 
 
-                                                Write-Host Here should be Clean Fleets
-                                                Write-Host "Current Location is: $cwd"
-                                                Write-Host "Clean Fleets Command: $cmdFleetCmd"
-                                            '''
-                                        }
-                                    // }
+                                            Write-Host Here should be Clean Fleets
+                                            Write-Host "Current Location is: $cwd"
+                                            Write-Host "Clean Fleets Command: $cmdFleetCmd"
+                                        '''
+                                    }
                                 }
                             }
                         }
