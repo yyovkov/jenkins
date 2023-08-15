@@ -110,11 +110,13 @@ pipeline {
                         default:
                             break
                     }
-                    // TODO: Print all variables for debugging reasons
-                    // powershell "dir env:"
-                    sh '''
-                     env
-                    '''
+                    // Print all variables for debugging reasons
+                    if (isUnix()) {
+                        sh '''env'''
+                    }
+                    else {
+                        powershell '''dir env:'''
+                    }
                 }
             }
         }
