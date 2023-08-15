@@ -35,6 +35,7 @@ pipeline {
 
     environment {
         GIT_CREDENTIALS_ID = 'gh-deploy-key'
+        DEV_AWS_BUILD_ACCESS = 'aws-jenkins-dev'
         CRED_CICD = credentials('cicd_server')
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
@@ -102,7 +103,7 @@ pipeline {
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
                             withCredentials([aws(
-                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS
                                     accessKeyVariable: 'aws_key',
                                     secretKeyVariable: "aws_secret"
                                     )]) {
