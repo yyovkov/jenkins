@@ -153,9 +153,9 @@ pipeline {
                             }
                         }
                         stage('Clean Fleets'){
-                            steps{
-                                script{
-                                    dir("${env:SERVER_BUILD_DIR}") {
+                            steps {
+                                script {
+                                    dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                         powershell '''
                                             Write-Host Here should be Clean Fleets
                                             // $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
