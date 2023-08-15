@@ -156,7 +156,7 @@ pipeline {
                                         | Join-Path -ChildPath WindowsServer
                                     Write-Host Source $buildSourceDir
                                     $buildDestDir = ${params.PACKAGE_PATH}
-                                    Write-Host Destination $buildDestDir
+                                    Write-Host Destination ${params.PACKAGE_PATH}
                                 '''
                             }
                         }
