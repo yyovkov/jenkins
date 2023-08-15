@@ -88,15 +88,14 @@ pipeline {
         stage('Setup dynamic environment') {
             steps {
                 script {
-                    // Setup SENTRY_URL bassed on TARGET_CONNECTION parameter
                     switch(params.TARGET_CONNECTION) {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
-                            evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-prod'
+                            // evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-prod'
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
-                            evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-dev'
+                            // evn.AWS_DEPLOY_CREDENTIALS = 'aws-jenkins-dev'
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
@@ -161,7 +160,7 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    withCredentials([usernamePassword(${env.AWS_DEPLOY_CREDENTIALS}, usernameVariable: MY_AWS_ACCESS_KEY_ID, passwordVariable: AWS_SECRET_ACCESS_KEY)]) {
+                                    // withCredentials([usernamePassword(${env.AWS_DEPLOY_CREDENTIALS}, usernameVariable: MY_AWS_ACCESS_KEY_ID, passwordVariable: AWS_SECRET_ACCESS_KEY)]) {
                                         powershell 'dir env:'
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
@@ -185,7 +184,7 @@ pipeline {
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
                                             '''
                                         }
-                                    }
+                                    // }
                                 }
                             }
                         }
