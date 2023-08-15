@@ -166,7 +166,8 @@ pipeline {
                                                     secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
-                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                # $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                $cleanFleetExe = Join-Path . Devops `
                                                     | Join-Path -ChildPath aws `
                                                     | Join-Path -ChildPath AWSHelper.exe
                                                 $cmdFleetCmd = "& $cleanFleetExe" + `
