@@ -161,11 +161,7 @@ pipeline {
                                 script {
                                     dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                         powershell '''
-                                            Write-Host Here should be Clean Fleets
-
                                             $cwd = Get-Location
-                                            Write-Host "Current Location is: $cwd"
-
 
                                             # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                             $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
@@ -175,9 +171,15 @@ pipeline {
                                             
                                             # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
-                                            $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                            # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                            $cmdFleetCmd = "& $cleanFleetExe"
 
                                             # $cmdCleanFleet = 
+
+                                            Write-Host Here should be Clean Fleets
+                                            Write-Host "Current Location is: $cwd"
+                                            Write-Host "Clean Fleets Command: "
+
                                     '''
                                     }
                                 }
