@@ -35,7 +35,6 @@ pipeline {
 
     environment {
         GIT_CREDENTIALS_ID = 'gh-deploy-key'
-        DEV_AWS_BUILD_ACCESS = credentials('aws-jenkins-dev')
         CRED_CICD = credentials('cicd_server')
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
@@ -93,23 +92,10 @@ pipeline {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
-                            // withCredentials([aws(credentialsId:'aws-jenkins-prod', 
-                            //         accessKeyVariable: key, secretKeyVariable: secret)]){
-                            //     env.DEPLOY_AWS_ACCESS_KEY_ID = key
-                            //     env.DEPLOY_AWS_SECRET_ACCESS_KEY = secret
-                            // }
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
-                            withCredentials([aws(
-                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
-                                    accessKeyVariable: 'aws_key',
-                                    secretKeyVariable: "aws_secret"
-                                    )]) {
-                                env.DEPLOY_AWS_ACCESS_KEY_ID = env.aws_key
-                                env.DEPLOY_AWS_SECRET_ACCESS_KEY = env.aws_secret
-                            }
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
@@ -174,13 +160,13 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    // withCredentials([usernamePassword(${env.AWS_DEPLOY_CREDENTIALS}, usernameVariable: MY_AWS_ACCESS_KEY_ID, passwordVariable: AWS_SECRET_ACCESS_KEY)]) {
+                                    withCredentials([aws(credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                                accessKeyVariable: 'aws_key', secretKeyVariable: "aws_secret")]) {
                                         powershell 'dir env:'
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
                                                 $cwd = Get-Location
 
-                                                # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                                 $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
                                                     | Join-Path -ChildPath aws `
                                                     | Join-Path -ChildPath AWSHelper.exe
@@ -189,9 +175,7 @@ pipeline {
                                                 # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
                                                 # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
-                                                $cmdFleetCmd = "& $cleanFleetExe"
-
-                                                # $cmdCleanFleet = 
+                                                $cmdFleetCmd = "& $cleanFleetExe ${env:aws_key} ${env:aws_secret} ${params.AWS_REGION}"
 
                                                 Write-Host Here should be Clean Fleets
                                                 Write-Host "Current Location is: $cwd"
