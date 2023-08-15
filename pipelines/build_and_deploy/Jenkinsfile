@@ -92,11 +92,11 @@ pipeline {
                     switch(params.TARGET_CONNECTION) {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
-                            env.AWS_CREDENTIALS_ID = 'aws-jenkins-prod'
+                            env.AWS_CREDENTIALS_ID = credentials('aws-jenkins-prod')
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
-                            env.AWS_CREDENTIALS_ID = 'aws-jenkins-dev'
+                            env.AWS_CREDENTIALS_ID = credentials('aws-jenkins-dev')
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
