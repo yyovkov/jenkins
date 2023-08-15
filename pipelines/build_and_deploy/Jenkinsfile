@@ -63,7 +63,7 @@ pipeline {
                 echo "Pipeline name: DevGit "
                 echo "Invoke pipeline: 'GetLatestStable'"
 
-                // TODO: Uncomment
+                // TODO: Uncomment build
                 // script {
                 //     plasticVars = cm(
                 //         branch:         "${params:PLASTICSCM_BRANCH}",
@@ -127,9 +127,9 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    // TODO: Uncomment
+                                    // TODO: Uncomment for production
+                                    // echo "Skipping build to test variables
                                     // gameliftBuild()
-                                    echo "Skip build temporary"
                                 }
                             }
                         }
@@ -143,7 +143,7 @@ pipeline {
                         //         """
                         //     }
                         // }
-                        stage('Copy Build to AWS Build folder'r') {
+                        stage('Copy Build to AWS Build folder') {
                             when {
                                 // Should be run when building Winddowse Version Only
                                 // expression  {params.BUILD_LINUX_SERVER == false}
