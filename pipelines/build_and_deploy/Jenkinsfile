@@ -102,8 +102,8 @@ pipeline {
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
                             withCredentials([aws(credentialsId: 'aws-jenkins-dev')]) {
-                                env.DEPLOY_AWS_ACCESS_KEY_ID = ${env.AWS_ACCESS_KEY_ID}
-                                env.DEPLOY_AWS_SECRET_ACCESS_KEY = ${env.AWS_SECRET_ACCESS_KEY}
+                                env.DEPLOY_AWS_ACCESS_KEY_ID = env.AWS_ACCESS_KEY_ID
+                                env.DEPLOY_AWS_SECRET_ACCESS_KEY = env.AWS_SECRET_ACCESS_KEY
                             }
                             break
                         default:
