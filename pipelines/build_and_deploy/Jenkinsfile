@@ -129,6 +129,7 @@ pipeline {
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     // TODO: Uncomment
                                     // gameliftBuild()
+                                    echo "Skip build temporary"
                                 }
                             }
                         }
