@@ -82,7 +82,6 @@ pipeline {
                 //     env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
                 //     env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
                 // }
-                powershell "dir env:"
             }
         }
 
@@ -111,6 +110,10 @@ pipeline {
                         default:
                             break
                     }
+                    // powershell "dir env:"
+                    sh '''
+                     env
+                    '''
                 }
             }
         }
@@ -162,12 +165,16 @@ pipeline {
                                             $cwd = Get-Location
                                             Write-Host "Current Location is: $cwd"
 
-                                            
-                                            # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+
+                                            // $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+                                            $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                | Join-Path -ChildPath aws `
+                                                | Join-Path -ChildPath AWSHelper.exec
+
                                             
                                             # %AWS_ACCESS_KEY_ID% %AWS_SECRET_ACCESS_KEY% %AWS_REGION
 
-                                            # $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
+                                            $cmdFleetCmd = "& $cleanFleetExe ${env:AWS_CREDENTIALS_ID}"
 
                                             # $cmdCleanFleet = 
                                     '''
