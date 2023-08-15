@@ -92,7 +92,7 @@ pipeline {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
                             env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
-                            withCredentials([aws(credentialsId:"${env.AWS_DEPLOY_CREDENTIAL}", 
+                            withCredentials([aws(credentialsId:'aws-jenkins-prod', 
                                     accessKeyVariable: key, secretKeyVariable: secret)]){
                                 env.DEPLOY_AWS_ACCESS_KEY_ID = key
                                 env.DEPLOY_AWS_SECRET_ACCESS_KEY = secret
