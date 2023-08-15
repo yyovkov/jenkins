@@ -155,8 +155,8 @@ pipeline {
                                     $buildSourceDir = Join-Path $env:PLASTICSCM_LOCAL_PATH Build `
                                         | Join-Path -ChildPath WindowsServer
                                     Write-Host Source $buildSourceDir
-                                    $buildDestDir = ${params.PACKAGE_PATH}
-                                    Write-Host Destination ${params.PACKAGE_PATH}
+                                    $buildDestDir = ${env:PACKAGE_PATH}
+                                    Write-Host Destination $buildDestDir
                                 '''
                             }
                         }
