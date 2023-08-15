@@ -110,6 +110,7 @@ pipeline {
                         default:
                             break
                     }
+                    // TODO: Print all variables for debugging reasons
                     // powershell "dir env:"
                     // sh '''
                     //  env
@@ -166,7 +167,7 @@ pipeline {
                                             Write-Host "Current Location is: $cwd"
 
 
-                                            // $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
+                                            # $cleanFleetExe = .\\Devops\\aws\\AWSHelper.exe 
                                             $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
                                                 | Join-Path -ChildPath aws `
                                                 | Join-Path -ChildPath AWSHelper.exec
