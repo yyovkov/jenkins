@@ -111,9 +111,9 @@ pipeline {
                             break
                     }
                     // powershell "dir env:"
-                    sh '''
-                     env
-                    '''
+                    // sh '''
+                    //  env
+                    // '''
                 }
             }
         }
