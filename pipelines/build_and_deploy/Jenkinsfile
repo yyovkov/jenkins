@@ -161,7 +161,7 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
-                                    withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                                    withAWS(credentials: 'aws-jenkins-dev', region: 'us-east-1') {
                                         powershell 'dir env:'
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
