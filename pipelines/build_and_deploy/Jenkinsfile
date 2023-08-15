@@ -162,7 +162,7 @@ pipeline {
                             steps {
                                 script {
                                     dir("${env:PLASTICSCM_LOCAL_PATH}") {
-                                        withAWS(credentials:"${env.AWS_CREDENTIALS_ID}") {
+                                        withCredentials(credentials:"${env.AWS_CREDENTIALS_ID}") {
                                             powershell 'dir env:'
                                             powershell '''
                                                 $cwd = Get-Location
