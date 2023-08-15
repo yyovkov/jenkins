@@ -155,10 +155,12 @@ pipeline {
                                         | Join-Path -ChildPath WindowsServer
                                     $buildDestDir = Join-Path ${env:PACKAGE_PATH} ${env:BUILD_NUMBER} `
                                         | Join-Path -ChildPath WindowsServer
-                                    Write-Host Start Copying Build
-                                    Write-Host Source $buildSourceDir
-                                    Write-Host Destination $buildDestDir
                                     $cmdXCopy = "& XCopy $buildSourceDir $buildDestDir /E /H /C /I"
+
+                                    Write-Host Start Copying Build
+                                    Write-Host Source: $buildSourceDir
+                                    Write-Host Destination: $buildDestDir
+                                    Write-Host Command to copy build: $cmdXCopy
                                 '''
                             }
                         }
