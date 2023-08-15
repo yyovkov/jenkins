@@ -96,7 +96,7 @@ pipeline {
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
-                            env.AWS_CREDENTIALS_ID = credentials('aws-jenkins-dev')
+                            AWS_CREDENTIALS_ID = credentials('aws-jenkins-dev')
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
@@ -161,6 +161,7 @@ pipeline {
                         stage('Clean Fleets'){
                             steps {
                                 script {
+                                    powershell 'dir env:'
                                     dir("${env:PLASTICSCM_LOCAL_PATH}") {
                                         powershell '''
                                             $cwd = Get-Location
