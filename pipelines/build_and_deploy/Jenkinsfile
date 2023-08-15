@@ -126,7 +126,8 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    gameliftBuild()
+                                    // TODO: Uncomment
+                                    // gameliftBuild()
                                 }
                             }
                         }
@@ -140,7 +141,7 @@ pipeline {
                         //         """
                         //     }
                         // }
-                        stage('Copy to AWS build folder') {
+                        stage('Copy Build to AWS Build folder'r') {
                             when {
                                 // Should be run when building Winddowse Version Only
                                 // expression  {params.BUILD_LINUX_SERVER == false}
@@ -152,6 +153,8 @@ pipeline {
                                     $buildSourceDir = Join-Path $env:PLASTICSCM_LOCAL_PATH Build `
                                         | Join-Path -ChildPath WindowsServer
                                     Write-Host Source $buildSourceDir
+                                    $buildDestDir = ${env.PACKAGE_PATH}
+                                    Write-Host Destination $buildDestDir
                                 '''
                             }
                         }
