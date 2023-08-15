@@ -171,7 +171,7 @@ pipeline {
                 }
                 stage('Client GameCast Build and Deploy') {
                     when {
-                        expression {params.ENABLE_CLIENT_GAMECAST == true}
+                        expression {params.ENABLE_CLIENT_GAMECAST == false}
                     }
                     stages {
                         stage('Client GameCast Build') {
