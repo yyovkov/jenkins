@@ -146,6 +146,10 @@ pipeline {
                                 expression  {params.BUILD_LINUX_SERVER == false }
                             }
                             steps {
+                                withAWS(credentials:"${env.AWS_CREDENTIALS_ID}") {
+                                    // do something
+                                    powershell 'dir env:'
+                                }
                                 powershell '''
                                     $buildSourceDir = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Build `
                                         | Join-Path -ChildPath WindowsServer
