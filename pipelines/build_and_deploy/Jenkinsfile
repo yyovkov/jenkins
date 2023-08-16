@@ -215,6 +215,7 @@ pipeline {
                                     echo "fleetName: ${fleetName}"
                                     echo "awsBuildName: ${awsBuildName}"
                                 }
+                            // Add here inside this stage the stage: stage('Upload to AWS')
                             }
                         }
                         stage('Server GameLift Deploy'){
