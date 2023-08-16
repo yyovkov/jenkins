@@ -192,7 +192,7 @@ pipeline {
                             steps {
                                 script {
                                     def runTimeConfig = gameliftRuntimeConfig()
-                                    echo runTimeConfig is ${env.runTimeConfig}
+                                    // echo runTimeConfig is ${env.runTimeConfig}
                                 }
                             }
                         }
