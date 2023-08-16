@@ -191,7 +191,11 @@ pipeline {
                         stage('Define AWS Runtime params and other vars') {
                             steps {
                                 script {
-                                    env.runTimeConfig = gameliftRuntimeConfig()
+                                    env.runTimeConfig = gameliftRuntimeConfig(
+                                        os:      "${env.PLATFORM}",
+                                        config:  "${env.SERVER_CONFIG}", 
+                                        concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
+                                    )
                                     echo "runTimeConfig is ${env.runTimeConfig}"
                                 }
                             }
