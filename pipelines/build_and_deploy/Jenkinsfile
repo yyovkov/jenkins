@@ -208,8 +208,8 @@ pipeline {
                                     // TODO: Change snakecaset to uppercase
                                     env.runTimeConfig = "ServerProcesses=${env.test}"
                                     echo "runTimeConfig is ${env.runTimeConfig}"
-
-                                    env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPAR}-$env.MODEL_NAME"
+                                    env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
+                                    env.awsBuildName = "Build-${env.FLEETNAMEPART}
             echo env.fleetName
                                 }
                             }
