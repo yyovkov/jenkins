@@ -200,17 +200,20 @@ pipeline {
                         stage('Define AWS Runtime params and other vars') {
                             steps {
                                 script {
-                                    env.test = gameliftRuntimeConfig(
+                                    env._rt_config = gameliftRuntimeConfig(
                                         os:      "${env.OPERATING_SYSTEM}",
                                         config:  "${env.SERVER_CONFIG}", 
                                         concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                     )
                                     // TODO: Change snakecaset to uppercase
-                                    env.runTimeConfig = "ServerProcesses=${env.test}"
-                                    echo "runTimeConfig is ${env.runTimeConfig}"
+                                    env.runTimeConfig = "ServerProcesses=${env._rt_config}"
                                     env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
                                     env.awsBuildName = "Build-${env.FLEETNAMEPART}
-            echo env.fleetName
+
+                                    // Display Names
+                                    echo "runTimeConfig: ${env.runTimeConfig}"
+                                    echo "fleetName: ${fleetName}"
+                                    echo "awsBuildName: ${awsBuildName}"
                                 }
                             }
                         }
