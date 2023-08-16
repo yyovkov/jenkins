@@ -45,7 +45,7 @@ pipeline {
         PLASTICSCM_LOCAL_PATH = "${env.WORKSPACE}/${env.PLASTICSCM_TARGET_REPOSITORY}"
         PROJECT_PATH = "${env.PLASTICSCM_LOCAL_PATH}" + '/Mytaverse.uproject'
         SERVER_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/WindowsServer"
-        UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
+        UAT_PATH = "${UE_ENGINE}" + "/Engine/Build/BatchFiles/RunUAT.bat"
 
         buildFolder = "${params.BUILD_LINUX_SERVER ? "${env.LINUX_BUILD_ROOT}" : "${env.SERVER_BUILD_ROOT}"}"
     }
