@@ -208,7 +208,7 @@ pipeline {
                                     // TODO: Change snakecaset to uppercase
                                     env.runTimeConfig = "ServerProcesses=${env._rt_config}"
                                     env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
-                                    env.awsBuildName = "Build-${env.FLEETNAMEPART}
+                                    env.awsBuildName = "Build-${env.FLEETNAMEPART}"
 
                                     // Display Names
                                     echo "runTimeConfig: ${env.runTimeConfig}"
