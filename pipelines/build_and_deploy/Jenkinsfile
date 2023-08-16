@@ -36,16 +36,16 @@ pipeline {
     environment {
         GIT_CREDENTIALS_ID = 'gh-deploy-key'
         CRED_CICD = credentials('cicd_server')
+        LINUX_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/LinuxServer"
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
+        PACKAGE_NUMBER = env.BUILD_NUMBER
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
         PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
         PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
         PLASTICSCM_LOCAL_PATH = "${env.WORKSPACE}/${env.PLASTICSCM_TARGET_REPOSITORY}"
         PROJECT_PATH = "${env.PLASTICSCM_LOCAL_PATH}" + '/Mytaverse.uproject'
+        SERVER_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/WindowsServer"
         UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
-
-        SERVER_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.BUILD_NUMBER}/WindowsServer"
-        LINUX_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.BUILD_NUMBER}/LinuxServer"
     }
 
     stages {
