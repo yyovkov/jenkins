@@ -191,7 +191,7 @@ pipeline {
                         stage('Define AWS Runtime params and other vars') {
                             steps {
                                 script {
-                                    def runTimeConfig = gameliftRuntimeConfig()
+                                    env.runTimeConfig = gameliftRuntimeConfig()
                                     // echo runTimeConfig is ${env.runTimeConfig}
                                 }
                             }
