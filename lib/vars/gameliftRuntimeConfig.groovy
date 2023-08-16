@@ -1,3 +1,3 @@
 def GameLiftRuntimeConfig(body){
-    return "Hello world!"
+    echo "Hello world!"
 }
