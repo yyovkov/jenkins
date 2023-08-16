@@ -197,8 +197,12 @@ pipeline {
                                         config:  "${env.SERVER_CONFIG}", 
                                         concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                     )
+                                    // TODO: Change snakecaset to uppercase
                                     env.runTimeConfig = "ServerProcesses=${env.test}"
                                     echo "runTimeConfig is ${env.runTimeConfig}"
+
+                                     env.fleetName = "Myta5-" + "$env.serverPlasticChangeSet-" + FleetNamePart("$env.TARGET_CONNECTION") +"-$env.MODEL_NAME"
+            echo env.fleetName
                                 }
                             }
                         }
