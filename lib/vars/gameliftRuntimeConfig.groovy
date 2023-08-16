@@ -7,7 +7,7 @@ def call(Map conf) {
     // * os: operatingSystem - [Linux|Win64]
     // * config: UE5 build config - [Development|Shipping]
     // * concExe: concurent executions - Number
-    if ("${conf.os}" == 'AMAZON_LINUX_2') {
+    if (conf.os == 'AMAZON_LINUX_2') {
         path = '/local/game/Mytaverse/Binaries/Linux/MytaverseServer'
         if("${conf.config}" == 'Development') {
             return 'ServerProcesses=[{ \
@@ -15,7 +15,7 @@ def call(Map conf) {
                 ConcurrentExecutions='+ conf.concExe + \
             '}]'
         }
-        if("${config}" == 'Shipping') {
+        if(conf.config == 'Shipping') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaverseServer-Linux-Shipping, \
                 ConcurrentExecutions=' + conf.concExe + \
@@ -23,13 +23,13 @@ def call(Map conf) {
         }
     } else {
         path = 'C:/game/Mytaverse/Binaries/Win64/'
-        if("${config}" == 'Development') {
+        if(conf.config == 'Development') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaverseServer.exe, \
                 ConcurrentExecutions='+ conf.concExe + \
             '}]'
         }
-        if("${config}" == 'Shipping') {
+        if(confconfig == 'Shipping') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaverseServer-Win64-Shipping.exe, \
                 ConcurrentExecutions=' + conf.concExe + \
