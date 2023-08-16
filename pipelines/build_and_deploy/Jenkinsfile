@@ -197,7 +197,7 @@ pipeline {
                                         concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                     )
                                     env.runTimeConfig = "${env.ServerProcesses} + '=' + ${env.ServerProcesses}"
-                                    // echo "runTimeConfig is ${env.runTimeConfig}"
+                                    echo "runTimeConfig is ${env.runTimeConfig}"
                                 }
                             }
                         }
