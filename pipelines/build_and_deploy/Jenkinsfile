@@ -210,7 +210,6 @@ pipeline {
                                     env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
                                     env.awsBuildName = "Build-${env.FLEETNAMEPART}"
 
-                                    // Display Names
                                     echo "runTimeConfig: ${env.runTimeConfig}"
                                     echo "fleetName: ${fleetName}"
                                     echo "awsBuildName: ${awsBuildName}"
