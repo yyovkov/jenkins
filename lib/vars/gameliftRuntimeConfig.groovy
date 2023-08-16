@@ -16,19 +16,19 @@ def call(Map conf) {
             '}]'
         }
         if(conf.config == 'Shipping') {
-            // The correct way
-            // ServerProcesses = [[
-            //     'LaunchPath': path + '/MytaverseServer-Linux-Shipping',
-            //     'ConcurrentExecutions': conf.concExe
-            // ]]
+            The correct way
+            ServerProcesses = [[
+                'LaunchPath': path + '/MytaverseServer-Linux-Shipping',
+                'ConcurrentExecutions': conf.concExe
+            ]]
              
-            // return ServerProcesses
+            return 'ServerProcesses'=ServerProcesses
 
             // Belarusian's way
-            return 'ServerProcesses=[{ \
-                LaunchPath=' + path + '/MytaverseServer-Linux-Shipping, \
-                ConcurrentExecutions=' + conf.concExe + \
-            '}]'
+            // return 'ServerProcesses=[{ \
+            //     LaunchPath=' + path + '/MytaverseServer-Linux-Shipping, \
+            //     ConcurrentExecutions=' + conf.concExe + \
+            // '}]'
         }
     } else {
         path = 'C:/game/Mytaverse/Binaries/Win64'
