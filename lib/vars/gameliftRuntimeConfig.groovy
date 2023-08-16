@@ -1,3 +1,3 @@
-def gameLiftRuntimeConfig(body){
+def call(body){
     echo "Hello world!"
 }
