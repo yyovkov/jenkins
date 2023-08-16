@@ -209,7 +209,7 @@ pipeline {
                                     env.runTimeConfig = "ServerProcesses=${env.test}"
                                     echo "runTimeConfig is ${env.runTimeConfig}"
 
-                                    env.fleetName = "Myta5-" + "${env.PLASTICSCM_CHANGESET_ID}-" + FleetNamePart("$env.TARGET_CONNECTION") +"-$env.MODEL_NAME"
+                                    env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPAR}-$env.MODEL_NAME"
             echo env.fleetName
                                 }
                             }
