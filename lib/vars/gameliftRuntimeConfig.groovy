@@ -4,7 +4,7 @@
 
 def call(Map conf) {
     // Options conf Map options required
-    // * os: operatingSystem - [Linux|Win64]
+    // * os: operatingSystem - [AMAZON_LINUX_2|WINDOWS_2012]
     // * config: UE5 build config - [Development|Shipping]
     // * concExe: concurent executions - Number
     if (conf.os == 'AMAZON_LINUX_2') {
@@ -22,7 +22,7 @@ def call(Map conf) {
             '}]'
         }
     } else {
-        path = 'C:/game/Mytaverse/Binaries/Win64/'
+        path = 'C:/game/Mytaverse/Binaries/Win64'
         if(conf.config == 'Development') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaverseServer.exe, \

@@ -192,7 +192,7 @@ pipeline {
                             steps {
                                 script {
                                     env.runTimeConfig = gameliftRuntimeConfig(
-                                        os:      "${env.PLATFORM}",
+                                        os:      "${env.OPERATING_SYSTEM}",
                                         config:  "${env.SERVER_CONFIG}", 
                                         concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                     )
