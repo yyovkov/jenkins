@@ -16,12 +16,12 @@ def call(Map conf) {
             '}]'
         }
         if(conf.config == 'Shipping') {
-            ServerProcesses = [{
-                'LaunchPath' = path + '/MytaverseServer-Linux-Shippin',
-                'ConcurrentExecutions' = conf.concEx
-            }]
+            ServerProcesses = [
+                'LaunchPath' = path + '/MytaverseServer-Linux-Shipping',
+                'ConcurrentExecutions' = conf.concExe
+            ]
              
-            return ServerProcesses.getClass()
+            return ServerProcesses
             // return 'ServerProcesses=[{ \
             //     LaunchPath=' + path + '/MytaverseServer-Linux-Shipping, \
             //     ConcurrentExecutions=' + conf.concExe + \
