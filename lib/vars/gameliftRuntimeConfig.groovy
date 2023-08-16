@@ -1,3 +1,3 @@
-def GameLiftRuntimeConfig(body){
+def gameLiftRuntimeConfig(body){
     echo "Hello world!"
 }
