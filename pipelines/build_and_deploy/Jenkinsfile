@@ -188,6 +188,14 @@ pipeline {
                                 }
                             }
                         }
+                        stage('Define AWS Runtime params and other vars') {
+                            steps {
+                                script {
+                                    env.runTimeConfig = gameliftRuntimeConfig()
+                                    echo runTimeConfig is: ${env.runTimeConfig}
+                                }
+                            }
+                        }
                         stage('Server GameLift Deploy'){
                             steps {
                                 gameliftDeploy()
