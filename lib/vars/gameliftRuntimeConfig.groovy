@@ -22,7 +22,7 @@ def call(Map conf) {
                 'ConcurrentExecutions': conf.concExe
             ]]
              
-            return 'ServerProcesses'=ServerProcesses
+            return ServerProcesses
 
             // Belarusian's way
             // return 'ServerProcesses=[{ \
