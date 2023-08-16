@@ -31,7 +31,7 @@ def call(Map conf) {
         }
         if("${config}" == 'Shipping') {
             return 'ServerProcesses=[{ \
-                LaunchPath=' + path + '/MytaverseServer-Win64-Shipping.exe,
+                LaunchPath=' + path + '/MytaverseServer-Win64-Shipping.exe, \
                 ConcurrentExecutions=' + conf.concExe + \
             '}]'
         }
