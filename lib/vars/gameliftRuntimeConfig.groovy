@@ -9,7 +9,7 @@ def call(Map conf) {
     // * concExe: concurent executions - Number
     if (conf.os == 'AMAZON_LINUX_2') {
         path = '/local/game/Mytaverse/Binaries/Linux/MytaverseServer'
-        if("${conf.config}" == 'Development') {
+        if(conf.config == 'Development') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaveseServer, \
                 ConcurrentExecutions='+ conf.concExe + \
@@ -29,7 +29,7 @@ def call(Map conf) {
                 ConcurrentExecutions='+ conf.concExe + \
             '}]'
         }
-        if(confconfig == 'Shipping') {
+        if(conf.config == 'Shipping') {
             return 'ServerProcesses=[{ \
                 LaunchPath=' + path + '/MytaverseServer-Win64-Shipping.exe, \
                 ConcurrentExecutions=' + conf.concExe + \
