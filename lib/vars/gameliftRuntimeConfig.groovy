@@ -7,42 +7,31 @@ def call(Map conf) {
     // * os: operatingSystem - [AMAZON_LINUX_2|WINDOWS_2012]
     // * config: UE5 build config - [Development|Shipping]
     // * concExe: concurent executions - Number
+
     if (conf.os == 'AMAZON_LINUX_2') {
-        path = '/local/game/Mytaverse/Binaries/Linux/MytaverseServer'
+        path = '/local/game/Mytaverse/Binaries/Linux'
         if(conf.config == 'Development') {
-            return 'ServerProcesses=[{ \
-                LaunchPath=' + path + '/MytaveseServer, \
-                ConcurrentExecutions='+ conf.concExe + \
-            '}]'
+           paht = path + '/MytaverseServer'
         }
         if(conf.config == 'Shipping') {
-            // The correct way
-            ServerProcesses = [[
-                'LaunchPath': path + '/MytaverseServer-Linux-Shipping',
-                'ConcurrentExecutions': conf.concExe
-            ]]
-             
-            return ServerProcesses
-
-            // Belarusian's way
-            // return 'ServerProcesses=[{ \
-            //     LaunchPath=' + path + '/MytaverseServer-Linux-Shipping, \
-            //     ConcurrentExecutions=' + conf.concExe + \
-            // '}]'
+            path = path + '/MytaverseServer-Linux-Shipping'
         }
     } else {
         path = 'C:/game/Mytaverse/Binaries/Win64'
+
         if(conf.config == 'Development') {
-            return 'ServerProcesses=[{ \
-                LaunchPath=' + path + '/MytaverseServer.exe, \
-                ConcurrentExecutions='+ conf.concExe + \
-            '}]'
+            path = path + '/MytaverseServer.exe'
         }
         if(conf.config == 'Shipping') {
-            return 'ServerProcesses=[{ \
-                LaunchPath=' + path + '/MytaverseServer-Win64-Shipping.exe, \
-                ConcurrentExecutions=' + conf.concExe + \
-            '}]'
+            path = path + '/MytaverseServer-Win64-Shipping.exe'
         }
     }
+
+
+    ServerProcesses = [[
+        'LaunchPath': path,
+        'ConcurrentExecutions': conf.concExe
+    ]]
+
+    return ServerProcesses
 }
