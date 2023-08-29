@@ -16,5 +16,12 @@ def call(Map conf) {
                             " --operating-system `"${env:UE5_SERVER_OS}`"" + `
                             " --region `"${env:UE5_AWS_REGION}`""
         Write-Host Upload Build Command: $cmdUploadBuild
+        # TODO: Uncomment in production
+        # Invoke-Expression $cmdBuildServer
+
+        # TODO: Replace below viktorism with check
+        Write-Host "Wait for 5 sec to move build state to READY"
+        sleep(5000)
+        Write-Host "Done"
     '''
 }
