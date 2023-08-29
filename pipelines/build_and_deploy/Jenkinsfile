@@ -224,8 +224,8 @@ pipeline {
                             steps {
                                 gameliftDeploy(
                                     buildName:      "${env.buildName}", 
-                                    buildVersion:   "${buildVersion}",
-                                    buildFolder:    "${buildFolder}",
+                                    buildVersion:   "${env.buildVersion}",
+                                    buildFolder:    "${env.buildFolder}",
                                     serverOS:       "${env.OPERATING_SYSTEM}",
                                     awsRegion:      "${env.AWS_REGION}"
                                 )
