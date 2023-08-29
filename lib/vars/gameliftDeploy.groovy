@@ -21,7 +21,7 @@ def call(Map conf) {
 
         # TODO: Replace below viktorism with check
         Write-Host "Wait for 5 sec to move build state to READY"
-        sleep(5000)
+        sleep(5)
         Write-Host "Done"
     '''
 }
