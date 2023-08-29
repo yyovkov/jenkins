@@ -1,11 +1,10 @@
 def call(Map conf) {
     echo "GameLift Server Deploying"
 
-    
+    env.GL_BUILD_NAME = conf.buildName
 
     powershell '''
-        # dir env: 
-        Write-Host conf
+        dir env: 
         $cmdUploadBuild = "& aws gamelift upload-build" + `
                             " --name ${conf.buildName}" + `
                             " --build-version conf.buildVersion" + `
