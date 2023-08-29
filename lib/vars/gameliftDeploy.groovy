@@ -3,9 +3,9 @@ def call(Map conf) {
 
     env.UE5_BUILD_NAME      = conf.buildName
     env.UE5_BUILD_VERSION   = conf.buildVersion
-    env UE5_BUILD_ROOT      = conf.buildFolder
-    // env UE5_SERVER_OS       = conf.serverOS
-    // env UE5_AWS_REGION      = conf.awsRegion
+    // env UE5_BUILD_ROOT      = conf.buildFolder
+    env UE5_SERVER_OS       = conf.serverOS
+    env UE5_AWS_REGION      = conf.awsRegion
 
     powershell '''
         dir env: 
