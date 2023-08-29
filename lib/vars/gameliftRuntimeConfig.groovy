@@ -1,7 +1,3 @@
-// def call(Map config){
-//     return "Hello world!"
-// }
-
 def call(Map conf) {
     // Options conf Map options required
     // * os: operatingSystem - [AMAZON_LINUX_2|WINDOWS_2012]

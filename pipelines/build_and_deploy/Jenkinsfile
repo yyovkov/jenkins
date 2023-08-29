@@ -200,19 +200,21 @@ pipeline {
                         stage('Define AWS Runtime params and other vars') {
                             steps {
                                 script {
-                                    env._rt_config = gameliftRuntimeConfig(
+                                    env._runtime_config = gameliftRuntimeConfig(
                                         os:      "${env.OPERATING_SYSTEM}",
                                         config:  "${env.SERVER_CONFIG}", 
                                         concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                     )
                                     // TODO: Change snakecaset to uppercase
-                                    env.runTimeConfig = "ServerProcesses=${env._rt_config}"
+                                    env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
                                     env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
-                                    env.awsBuildName = "Build-${env.FLEETNAMEPART}"
+                                    env.buildName = "Build-${env.FLEETNAMEPART}"
+                                    env.buildVersion = "0.0.${env.BUILD_NUMBER}"
 
                                     echo "runTimeConfig: ${env.runTimeConfig}"
                                     echo "fleetName: ${fleetName}"
-                                    echo "awsBuildName: ${awsBuildName}"
+                                    echo "buildName: ${buildName}"
+                                    echo "buildVersion: ${buildVersion}"
                                 }
                             // Add here inside this stage the stage: stage('Upload to AWS')
                             // and rename to gameliftDeploy
@@ -220,7 +222,13 @@ pipeline {
                         }
                         stage('Server GameLift Deploy'){
                             steps {
-                                gameliftDeploy()
+                                gameliftDeploy(
+                                    buildName:      "${env.buildName}", 
+                                    buildVersion:   "${buildVersion}",
+                                    buildFolder:    "${buildFolder}",
+                                    serverOS:       "${env.OPERATING_SYSTEM}",
+                                    awsRegion:      "${env.AWS_REGION}"
+                                )
                             }
                         }
                     }

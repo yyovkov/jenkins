@@ -84,7 +84,7 @@ var latestStableId = await cmHelper.GetLatestByPattern(pattern);
 Console.WriteLine($"Exit with {latestStableId}");
 return int.Parse(latestStableId);
 
-===== Rusulgint code  ====
+* Resultint code
 
 ``` bash
 var pattern = $"latest-{mainLabelPart}";
