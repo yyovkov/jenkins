@@ -21,5 +21,5 @@ def call(Map conf) {
             " --region `"${env:UE5_AWS_REGION}`""
 
         Write-Host Create Fleet Command: $cmdCreateFleet
-    ```
+    '''
 }
