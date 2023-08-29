@@ -8,7 +8,6 @@ def call(Map conf) {
     env.UE5_AWS_REGION      = conf.awsRegion
 
     powershell '''
-        dir env: 
         $cmdUploadBuild = "& aws gamelift upload-build" + `
                             " --name `"${env:UE5_BUILD_NAME}`"" + `
                             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
