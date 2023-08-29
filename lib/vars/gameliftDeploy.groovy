@@ -24,4 +24,7 @@ def call(Map conf) {
         sleep(5)
         Write-Host "Done"
     '''
+
+    // TODO: Return build id from the `aws gamelift upload-build` command above
+    // return UE5_BUILD_ID
 }

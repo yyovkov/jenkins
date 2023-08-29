@@ -229,6 +229,13 @@ pipeline {
                                     serverOS:       "${env.OPERATING_SYSTEM}",
                                     awsRegion:      "${env.AWS_REGION}"
                                 )
+                                gameliftCreateFleet(
+                                    awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                    awsRegion:      "${env.AWS_REGION}",
+                                    buildId:        "should_be_taken_from_above",
+                                    runTimeConfig:  "${env.runTimeConfig}",
+                                    fleetName:      "${env.fleetName}",
+                                )
                             }
                         }
                     }
