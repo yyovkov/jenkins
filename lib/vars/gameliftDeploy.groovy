@@ -4,6 +4,7 @@ def call(Map conf) {
     
 
     powershell '''
+        dir env:
         $cmdUploadBuild = "& aws gamelift upload-build" + `
                             " --name ${conf.buildName}" + `
                             " --build-version conf.buildVersion" + `
