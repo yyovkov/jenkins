@@ -10,11 +10,11 @@ def call(Map conf) {
     powershell '''
         dir env: 
         $cmdUploadBuild = "& aws gamelift upload-build" + `
-                            " --name ${env:UE5_BUILD_NAME}" + `
-                            " --build-version ${env:UE5_BUILD_VERSION}" + `
-                            " --build-root ${env:UE5_BUILD_ROOT}" + `
-                            " --operating-system ${env:UE5_SERVER_OS}" + `
-                            " --region ${env:UE5_AWS_REGION}"
+                            " --name `"${env:UE5_BUILD_NAME}`"" + `
+                            " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
+                            " --build-root `"${env:UE5_BUILD_ROOT}`"" + `
+                            " --operating-system `"${env:UE5_SERVER_OS}`"" + `
+                            " --region `"${env:UE5_AWS_REGION}`""
         Write-Host Upload Build Command: $cmdUploadBuild
     '''
 }
