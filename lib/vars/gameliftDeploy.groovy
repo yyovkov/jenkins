@@ -22,6 +22,9 @@ def call(Map conf) {
         Write-Host "Wait for 5 sec to move build state to READY"
         sleep(5)
         Write-Host "Done"
+
+        $res = Invoke-Expression $cmdUploadBuild
+        Write-Output $res
     '''
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
