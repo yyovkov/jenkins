@@ -26,10 +26,10 @@ def call(Map conf) {
             " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`""
 
         Write-Host Create Fleet Command: $cmdCreateFleet
-        // From the output of $cmdCreateFleet should obtain ${build_id}
+        # From the output of $cmdCreateFleet should obtain ${build_id}
 
-        // TODO: Resolve this Victorism. The Fleed ID should be obtained from 
-        // the command creating the fleet.
+        # TODO: Resolve this Victorism. The Fleed ID should be obtained from 
+        # the command creating the fleet.
         $cmdGetFleetsForBuild = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
             " gamelift list-fleets" + `
             " --build-id `"${env:UE5_BUILD_D}`"" + `
