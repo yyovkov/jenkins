@@ -32,7 +32,7 @@ def call(Map conf) {
         # the command creating the fleet.
         $cmdGetFleetsForBuild = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
             " gamelift list-fleets" + `
-            " --build-id `"${env:UE5_BUILD_D}`"" + `
+            " --build-id `"${env:UE5_BUILD_ID}`"" + `
             " --query `"FleetIds[0]`""
 
         Write-Host Cet Fleet for Build: $cmdGetFleetsForBuild

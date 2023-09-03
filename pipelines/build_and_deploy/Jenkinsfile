@@ -21,7 +21,7 @@ pipeline {
         choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.2xlarge', 'c5.xlarge', 'c5.large'])
         choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
         choice(name: 'SERVER_CONFIG', choices: ['Shipping', 'Development'])
-        choice(name: 'TARGET_CONNECTION', choices: ['CC_Dev', 'CC_Prod'])
+        choice(name: 'TARGET_CONNECTION', choices: ['CC_Sales', 'CC_Dev', 'CC_Prod'])
         // 
         string(name: 'AWS_CONCURRENT_EXECUTIONS', defaultValue: '4')
         string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region to which the build will be deployed')
@@ -107,7 +107,7 @@ pipeline {
                             break
                         case 'CC_Sales':
                             env.SENTRY_URL = "https://3e959cc9acd8d5e4a997e31340ae4107@o993426.ingest.sentry.io/4505664040927232"
-                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
                             env.FLEETNAMEPART = "Sales"
                             break
                         default:
@@ -222,20 +222,26 @@ pipeline {
                         }
                         stage('Server GameLift Deploy'){
                             steps {
-                                gameliftDeploy(
-                                    buildName:      "${env.buildName}", 
-                                    buildVersion:   "${env.buildVersion}",
-                                    buildFolder:    "${env.buildFolder}",
-                                    serverOS:       "${env.OPERATING_SYSTEM}",
-                                    awsRegion:      "${env.AWS_REGION}"
-                                )
-                                gameliftCreateFleet(
-                                    awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                    awsRegion:      "${env.AWS_REGION}",
-                                    buildId:        "should_be_taken_from_above",
-                                    runTimeConfig:  "${env.runTimeConfig}",
-                                    fleetName:      "${env.fleetName}",
-                                )
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: '_AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")] {
+                                        
+                                    gameliftDeploy(
+                                        buildName:      "${env.buildName}", 
+                                        buildVersion:   "${env.buildVersion}",
+                                        buildFolder:    "${env.buildFolder}",
+                                        serverOS:       "${env.OPERATING_SYSTEM}",
+                                        awsRegion:      "${env.AWS_REGION}"
+                                    )
+                                    gameliftCreateFleet(
+                                        awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                        awsRegion:      "${env.AWS_REGION}",
+                                        buildId:        "should_be_taken_from_above",
+                                        runTimeConfig:  "${env.runTimeConfig}",
+                                        fleetName:      "${env.fleetName}",
+                                    )
+                                }
                             }
                         }
                     }
