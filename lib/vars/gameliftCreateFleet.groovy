@@ -44,7 +44,7 @@ def call(Map conf) {
         #     $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
         # }
 
-        while ("True"){
+        while("True"){
             $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
             Write-Host Fleet $fleet_id status: $fleet_status. Next check in 60 sec.
             if ($fleetFinalStatuses.Contains($fleet_status)) {
