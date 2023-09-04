@@ -19,8 +19,8 @@ def call(Map conf) {
             " `"Key=jenkins_build_url,Value=${env:JENKINS_BUILD_URL}`"" + `
             " `"Key=jenkins_build_user_id,Value=${env:JENKINS_BUILD_USER_ID}`"" + `
             " `"Key=jenkins_build_user_name,Value=${env:JENKINS_BUILD_USER_NAME}`"" + `
-            " `"Key=customer,Value=${env:RESOURCE_CUSTOMER}'"" + `
-            " `"Key=owner,Value=${env:RESOURCE_OWNER}'""
+            " `"Key=customer,Value=${env:RESOURCE_CUSTOMER}`"" + `
+            " `"Key=owner,Value=${env:RESOURCE_OWNER}`""
 
         Write-Host Command to tag resource: $cmdTagResource
 
