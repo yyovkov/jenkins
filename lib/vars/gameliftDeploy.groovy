@@ -32,5 +32,5 @@ def call(Map conf) {
         Write-Output $build_id
     ''')
 
-    return buildId
+    return buildId.trim()
 }

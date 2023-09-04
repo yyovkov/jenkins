@@ -26,7 +26,6 @@ def call(Map conf) {
             " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`""
 
         Write-Host Create Fleet Command: $cmdCreateFleet
-        # From the output of $cmdCreateFleet should obtain ${build_id}
 
         # TODO: Resolve this Victorism. The Fleed ID should be obtained from 
         # the command creating the fleet.
@@ -35,6 +34,6 @@ def call(Map conf) {
             " --build-id `"${env:UE5_BUILD_ID}`"" + `
             " --query `"FleetIds[0]`""
 
-        Write-Host Cet Fleet for Build: $cmdGetFleetsForBuild
+        Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
     '''
 }

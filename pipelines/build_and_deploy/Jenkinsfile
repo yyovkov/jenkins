@@ -18,7 +18,7 @@ pipeline {
         booleanParam(name: 'ENABLE_CLIENT_GAMECAST', defaultValue: false, description: 'Build and deploy GameCast client')
         booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: false, description: 'Build and deploy PureWeb client')
         // 
-        choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.2xlarge', 'c5.xlarge', 'c5.large'])
+        choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.large', 'c5.xlarge', 'c5.2xlarge'])
         choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
         choice(name: 'SERVER_CONFIG', choices: ['Shipping', 'Development'])
         choice(name: 'TARGET_CONNECTION', choices: ['CC_Sales', 'CC_Dev', 'CC_Prod'])
@@ -233,7 +233,7 @@ pipeline {
                                             awsRegion:      "${env.AWS_REGION}"
                                         )
                                     }
-                                    echo "_gamelif_build_id: ${env._gamelift_build_id}"
+                                    echo "gamelif_build_id: ${env._gamelift_build_id}"
 
                                     gameliftCreateFleet(
                                         awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
