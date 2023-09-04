@@ -19,13 +19,13 @@ def call(Map conf) {
         Write-Host Upload Build Command: $cmdUploadBuild
 
         $res = Invoke-Expression $cmdUploadBuild
-        # TODO: Print output only in case of failure?
-        # Write-Information $res 
+        # Pringint the full output is long and not very helpful, so commented
+        # Write-Host $res 
         $build_id =  (echo $res | Select-String -Pattern "^Build Id:").ToString().Split(" ")[-1]
-        Write-Information Build ID: $build_id
+        Write-Host Build ID: $build_id
 
-        # TODO: Replace below viktorism with check
-        Write-Information "Wait for 5 sec to move build state to READY"
+        # TODO: Replace below viktorism with check of describe-build
+        Write-Host "Wait for 5 sec to move build state to READY"
         sleep(5)
 
         # return $build_id
