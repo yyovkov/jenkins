@@ -245,6 +245,7 @@ pipeline {
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
 
                                     }
+                                }
                             }
                         }
                         stage('GameLift Create Fleet'){
