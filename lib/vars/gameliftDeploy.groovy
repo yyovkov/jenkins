@@ -1,11 +1,11 @@
 def call(Map conf) {
     echo "GameLift Server Deploying"
 
-    env.UE5_BUILD_NAME      = conf.buildName
-    env.UE5_BUILD_VERSION   = conf.buildVersion
-    env.UE5_BUILD_ROOT      = conf.buildFolder
-    env.UE5_SERVER_OS       = conf.serverOS
-    env.UE5_AWS_REGION      = conf.awsRegion
+    env.UE5_BUILD_NAME      = conf.buildName.trim()
+    env.UE5_BUILD_VERSION   = conf.buildVersion.trim()
+    env.UE5_BUILD_ROOT      = conf.buildFolder.trim()
+    env.UE5_SERVER_OS       = conf.serverOS.trim()
+    env.UE5_AWS_REGION      = conf.awsRegion.trim()
 
     // def buildArn = powershell(returnStdout: true, script: '''
     def buildArn = powershell(returnStdout: true, script: '''
