@@ -227,15 +227,14 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        env._test_me = "Some code here"
+                                        env._gamelift_build_id = gameliftDeploy(
+                                            buildName:      "${env.buildName}", 
+                                            buildVersion:   "${env.buildVersion}",
+                                            buildFolder:    "${env.buildFolder}",
+                                            serverOS:       "${env.OPERATING_SYSTEM}",
+                                            awsRegion:      "${env.AWS_REGION}"
+                                        )
                                     }
-                                    env._gamelift_build_id = gameliftDeploy(
-                                        buildName:      "${env.buildName}", 
-                                        buildVersion:   "${env.buildVersion}",
-                                        buildFolder:    "${env.buildFolder}",
-                                        serverOS:       "${env.OPERATING_SYSTEM}",
-                                        awsRegion:      "${env.AWS_REGION}"
-                                    )
                                     echo "_gamelif_build_id: ${env._gamelift_build_id}"
 
                                     gameliftCreateFleet(
