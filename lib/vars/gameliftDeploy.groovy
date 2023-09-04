@@ -29,7 +29,7 @@ def call(Map conf) {
         # Write-Host "Wait for 5 sec to move build state to READY"
         # sleep(5)
 
-        eturn $build_id
+        return $build_id
         # Write-Output "build-id-xxx-bbb-ccc-aaa"
     ''')
 
