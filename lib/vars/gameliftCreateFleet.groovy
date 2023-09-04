@@ -33,10 +33,11 @@ def call(Map conf) {
         $fleetFinalStatuses = @("ACTIVE", "ERROR", "DELETING", "TERMINATED")
         $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_arnd} | ConvertFrom-Json"
         $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
+        Write-Host Fleet arn: $fleet_arnd
 
         while("True"){
             $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
-            Write-Host Fleet $fleet_arnd status: $fleet_status. Next check in 60 sec.
+            Write-Host Fleet status: $fleet_status. Next check in 60 sec.
             if ($fleetFinalStatuses.Contains($fleet_status)) {
                 if ($fleet_status.Equals("ACTIVE")) {
                     break StatusActive
