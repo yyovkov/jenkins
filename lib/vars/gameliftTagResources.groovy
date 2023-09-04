@@ -14,7 +14,7 @@ def call(Map conf) {
         $cmdTagResource = "& aws --region us-east-2 " + 1
             " gamelift tag-resource " + `
             " --resource-arn `"${RESOURCE_ARN}`"" + `
-            --tags "Key=jenkins,Value=true" + `
+            " --tags `"Key=jenkins,Value=true`"" + `
             " `"Key=jenkins_build_id,Value=${env:JENKINS_BUILD_ID}`"" + `
             " `"Key=jenkins_build_url,Value=${env:JENKINS_BUILD_URL}`"" + `
             " `"Key=jenkins_build_user_id,Value=${env:JENKINS_BUILD_USER_ID}`"" + `
