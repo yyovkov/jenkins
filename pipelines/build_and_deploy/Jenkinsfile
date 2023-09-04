@@ -139,6 +139,7 @@ pipeline {
                     env._TAGS = "${env._TAGS} \"Key=plasticscm_author,Value=${env.PLASTICSCM_AUTHOR}\""
                     env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_id,Value=${env.PLASTICSCM_CHANGESET_ID}\""
                     env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_guid,Value=${env.PLASTICSCM_CHANGESET_GUID}\""
+                    env._TAGS = "${env._TAGS} \"Key=target_connection,Value=${params.TARGET_CONNECTION}\""
 
                     // Print all variables for debugging reasons
                     if (isUnix()) {
@@ -165,8 +166,7 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    // TODO: Uncomment for IN PRODUCTION
-                                    // gameliftBuild()
+                                    gameliftBuild()
                                 }
                             }
                         }
@@ -213,30 +213,7 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Define AWS Runtime params and other vars') {
-                            steps {
-                                script {
-                                    env._runtime_config = gameliftRuntimeConfig(
-                                        os:      "${env.OPERATING_SYSTEM}",
-                                        config:  "${env.SERVER_CONFIG}", 
-                                        concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
-                                    )
-                                    // TODO: Change snakecaset to uppercase
-                                    env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
-                                    env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
-                                    env.buildName = "Build-${env.FLEETNAMEPART}"
-                                    env.buildVersion = "0.0.${env.BUILD_NUMBER}"
-
-                                    echo "runTimeConfig: ${env.runTimeConfig}"
-                                    echo "fleetName: ${fleetName}"
-                                    echo "buildName: ${buildName}"
-                                    echo "buildVersion: ${buildVersion}"
-                                }
-                            // Add here inside this stage the stage: stage('Upload to AWS')
-                            // and rename to gameliftDeploy
-                            }
-                        }
-                        stage('Server GameLift Deploy'){
+                        stage('Upload GameLift Build') {
                             steps {
                                 withCredentials([aws(
                                         credentialsId: env.AWS_DEPLOY_CREDENTIALS,
@@ -244,29 +221,50 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        // TODO: Remove for IN PRODUCTION
-                                        env._gamelift_build_arn = "arn:aws:gamelift:us-east-2:748866342572:build/build-04f7d109-4ddd-4a03-ae0d-b0aaef1df6d7"
+                                        
+                                        // TODO: Change snakecaset to uppercase
+                                        env.GAMLIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
+                                        env.GAMLIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
 
-                                        // TODO: Uncomment for IN PRODUCTION
-                                        // env._gamelift_build_arn = gameliftDeploy(
-                                        //     buildName:      "${env.buildName}", 
-                                        //     buildVersion:   "${env.buildVersion}",
-                                        //     buildFolder:    "${env.buildFolder}",
-                                        //     serverOS:       "${env.OPERATING_SYSTEM}",
-                                        //     awsRegion:      "${env.AWS_REGION}"
-                                        // )
+                                        echo "GAMLIFT_BUILD_NAME: ${GAMLIFT_BUILD_NAME}"
+                                        echo "GAMLIFT_BUILD_VERSION: ${GAMLIFT_BUILD_VERSION}"
 
-                                        // gameliftTagResources(
-                                        //     resource_arn:       "${env:_gamelift_build_arn}",
-                                        //     jenkins_build_id:   "${env:BUILD_ID}",
-                                        //     jenkins_build_url:  "${env:BUILD_URL}",
-                                        //     jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
-                                        //     jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                        //     reource_customer:   "${params:CUSTOMER}",
-                                        //     resource_owner:     "${params:OWNER}",
-                                        // )
+                                        env._gamelift_build_arn = gameliftDeploy(
+                                            GAMLIFT_BUILD_NAME:      "${env.GAMLIFT_BUILD_NAME}", 
+                                            GAMLIFT_BUILD_VERSION:   "${env.GAMLIFT_BUILD_VERSION}",
+                                            buildFolder:    "${env.buildFolder}",
+                                            serverOS:       "${env.OPERATING_SYSTEM}",
+                                            awsRegion:      "${env.AWS_REGION}"
+                                        )
+
+                                        gameliftTagResources(
+                                            resource_arn:   "${env:_gamelift_build_arn}",
+                                            buildTags:      "${env:_TAGS}"
+                                        )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
+
+                                    }
+                            }
+                        }
+                        stage('GameLift Create Fleet'){
+                            steps {
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+
+                                    script {
+                                        // Setup GameLift variables
+                                        env._runtime_config = gameliftRuntimeConfig(
+                                            os:      "${env.OPERATING_SYSTEM}",
+                                            config:  "${env.SERVER_CONFIG}", 
+                                            concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
+                                        )
+                                        env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
+                                        env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
+                                        echo "runTimeConfig: ${env.runTimeConfig}"
+                                        echo "fleetName: ${fleetName}"
 
                                         env._gamelift_fleet_arn = gameliftCreateFleet(
                                             awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
@@ -276,16 +274,6 @@ pipeline {
                                             fleetName:       "${env.fleetName}",
                                             fleetTags:       "${env._TAGS}"
                                         )
-
-                                        // gameliftTagResources(
-                                        //     resource_arn:       "${env:_gamelift_fleet_arn}",
-                                        //     jenkins_build_id:   "${env:BUILD_ID}",
-                                        //     jenkins_build_url:  "${env:BUILD_URL}",
-                                        //     jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
-                                        //     jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                        //     reource_customer:   "${params:CUSTOMER}",
-                                        //     resource_owner:     "${params:OWNER}",
-                                        // )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
                                     }
