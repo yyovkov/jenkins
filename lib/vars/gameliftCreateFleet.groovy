@@ -21,7 +21,7 @@ def call(Map conf) {
             " --build-id `"${env:UE5_BUILD_ID}`"" + `
             " --ec2-instance-type `"${env:UE5_AWS_INSTANCE_TYPE}`"" + `
             " --ec2-inbound-permissions `"${env:UE5_INBOUND_PERMS_SRV}`"" + `
-            " --ec2-inbound-permissions `"${env:UE5_INBOUND_PERMS_RDP}`"" + `
+            " `"${env:UE5_INBOUND_PERMS_RDP}`"" + `
             " --fleet-type `"${env:UE5_FLEET_TYPE}`"" + `
             " --runtime-configuration `"${env:UE5_RUNTIME_CONFIG}`"" + `
             " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`""
