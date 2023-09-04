@@ -1,11 +1,11 @@
 def call(Map conf) {
 
-    env.UE5_AWS_INSTANCE_TYPE  = conf.awsInstanceType
-    env.UE5_AWS_REGION         = conf.awsRegion
-    env.UE5_BUILD_ID           = conf.buildArn
-    env.UE5_RUNTIME_CONFIG     = conf.runTimeConfig
-    env.UE5_FLEET_NAME         = conf.fleetName
-    env.UE5_FLEET_TAGS         = conf.fleetTags
+    env.UE5_AWS_INSTANCE_TYPE  = conf.awsInstanceType.trim()
+    env.UE5_AWS_REGION         = conf.awsRegion.trim()
+    env.UE5_BUILD_ID           = conf.buildArn.trim()
+    env.UE5_RUNTIME_CONFIG     = conf.runTimeConfig.trim()
+    env.UE5_FLEET_NAME         = conf.fleetName.trim()
+    env.UE5_FLEET_TAGS         = conf.fleetTags.trim()
     env.UE5_INBOUND_PERMS_SRV  = "FromPort=7777,ToPort=7996,IpRange=0.0.0.0/0,Protocol=UDP" 
     env.UE5_INBOUND_PERMS_RDP  = "FromPort=3389,ToPort=3389,IpRange=0.0.0.0/0,Protocol=TCP"
     env.UE5_FLEET_TYPE         = "ON_DEMAND"
