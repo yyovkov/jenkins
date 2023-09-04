@@ -36,12 +36,12 @@ def call(Map conf) {
         # $fleet_id
         # $fleet_status = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
         $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json"
-
         $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
+
         while(!$fleet_status.Equals("ACTIVE")){
+            Write-Host Fleet $fleet_id status: $fleet_status. Next check in 60 sec.
             sleep 60
-            $fleet_status = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
-            Write-Host Fleet status: $fleet_status ($fleet_id)
+            $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
         }
 
         Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
