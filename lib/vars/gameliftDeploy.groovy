@@ -8,7 +8,7 @@ def call(Map conf) {
     env.UE5_AWS_REGION      = conf.awsRegion
 
     // def buildId = powershell(returnStdout: true, script: '''
-    def buildId = powershell(script: '''
+    def buildId = powershell(returnStdout: true, script: '''
         $cmdUploadBuild = "& aws gamelift upload-build" + `
             " --name `"${env:UE5_BUILD_NAME}`"" + `
             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
