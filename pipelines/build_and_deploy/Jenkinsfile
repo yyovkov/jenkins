@@ -234,6 +234,7 @@ pipeline {
                                         awsRegion:      "${env.AWS_REGION}"
                                     )
                                     echo "_gamelif_build_id: ${env._gamelift_build_id}"
+                                    
                                     gameliftCreateFleet(
                                         awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
                                         awsRegion:      "${env.AWS_REGION}",
