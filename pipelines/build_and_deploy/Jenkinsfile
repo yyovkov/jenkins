@@ -230,8 +230,8 @@ pipeline {
                                         echo "GAMLIFT_BUILD_VERSION: ${GAMLIFT_BUILD_VERSION}"
 
                                         env._gamelift_build_arn = gameliftDeploy(
-                                            GAMLIFT_BUILD_NAME:      "${env.GAMLIFT_BUILD_NAME}", 
-                                            GAMLIFT_BUILD_VERSION:   "${env.GAMLIFT_BUILD_VERSION}",
+                                            buildName:      "${env.GAMLIFT_BUILD_NAME}", 
+                                            buildVersion:   "${env.GAMLIFT_BUILD_VERSION}",
                                             buildFolder:    "${env.buildFolder}",
                                             serverOS:       "${env.OPERATING_SYSTEM}",
                                             awsRegion:      "${env.AWS_REGION}"
