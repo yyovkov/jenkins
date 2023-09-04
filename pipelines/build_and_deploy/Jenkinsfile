@@ -126,8 +126,8 @@ pipeline {
                     }
                      
                     // Current build vairables
-                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId 
-                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
+                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId.tirm()
+                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName.trim()
 
                     // Setup default resource tags
                     env._TAGS = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
