@@ -53,5 +53,5 @@ def call(Map conf) {
         Write-Output $fleet_arn
     ''')
 
-    return $fleetArn.trim()
+    return fleetArn.trim()
 }
