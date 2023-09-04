@@ -133,7 +133,7 @@ pipeline {
                     env._TAGS = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
                     env._TAGS = "${env._TAGS} \"Key=jenkins_build_url,Value=${env.BUILD_URL}\""
                     env._TAGS = "${env._TAGS} \"Key=jenkins_user_id,Value=${env.BUILD_TRIGGERED_BY_ID}\""
-                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_name,Value=${env.BUILD_TRIGGERED_BY_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_name,Value=${env.BUILD_TRIGGERED_BY_NAME}\""
                     env._TAGS = "${env._TAGS} \"Key=reource_customer,Value=${params:CUSTOMER}\""
                     env._TAGS = "${env._TAGS} \"Key=reource_customer,Value=${params:OWNER}\""
                     env._TAGS = "${env._TAGS} \"Key=plasticscm_author,Value=${env.PLASTICSCM_AUTHOR}\""
