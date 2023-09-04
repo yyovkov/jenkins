@@ -69,25 +69,24 @@ pipeline {
                 echo "Pipeline name: DevGit "
                 echo "Invoke pipeline: 'GetLatestStable'"
 
-                // TODO: Uncomment for in production
-                // script {
-                //     plasticVars = cm(
-                //         branch:         "${params:PLASTICSCM_BRANCH}",
-                //         changeset:      "${env:PLASTICSCM_CHANGESET}",
-                //         cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
-                //         changelog:      true,
-                //         credentialsId:  "${env.GIT_CREDENTIALS_ID}",
-                //         poll:           false,
-                //         repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
-                //         server:         "${env.PLASTICSCM_TARGET_SERVER}",
-                //         workingMode:    "LDAP",
-                //         directory:      "${env.PLASTICSCM_LOCAL_PATH}"
-                //     )
+                script {
+                    plasticVars = cm(
+                        branch:         "${params:PLASTICSCM_BRANCH}",
+                        changeset:      "${env:PLASTICSCM_CHANGESET}",
+                        cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
+                        changelog:      true,
+                        credentialsId:  "${env.GIT_CREDENTIALS_ID}",
+                        poll:           false,
+                        repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
+                        server:         "${env.PLASTICSCM_TARGET_SERVER}",
+                        workingMode:    "LDAP",
+                        directory:      "${env.PLASTICSCM_LOCAL_PATH}"
+                    )
 
-                //     env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
-                //     env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
-                //     env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
-                // }
+                    env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
+                    env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
+                    env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+                }
             }
         }
 
@@ -148,9 +147,7 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    // TODO: Uncomment for production
-                                    // echo "Skipping build to test variables
-                                    // gameliftBuild()
+                                    gameliftBuild()
                                 }
                             }
                         }
@@ -240,10 +237,10 @@ pipeline {
 
                                     gameliftCreateFleet(
                                         awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                        awsRegion:      "${env.AWS_REGION}",
-                                        buildId:        "should_be_taken_from_above",
-                                        runTimeConfig:  "${env.runTimeConfig}",
-                                        fleetName:      "${env.fleetName}",
+                                        awsRegion:       "${env.AWS_REGION}",
+                                        buildId:         "${env._gamelift_build_id}",
+                                        runTimeConfig:   "${env.runTimeConfig}",
+                                        fleetName:       "${env.fleetName}",
                                     )
                                 }
                             }
