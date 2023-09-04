@@ -113,8 +113,6 @@ pipeline {
                             env.SENTRY_URL = "not_setup"
                             env.FLEETNAMEPART = "Prod"
                             break
-                        env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId 
-                        env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
                     }
                     switch(params.CHANGESET_TYPE) {
                         case 'latest-stable':
@@ -131,6 +129,8 @@ pipeline {
                     else {
                         powershell '''dir env:'''
                     }
+                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId 
+                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
                 }
             }
         }
