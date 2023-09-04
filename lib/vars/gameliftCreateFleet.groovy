@@ -32,9 +32,7 @@ def call(Map conf) {
         $fleet_json = echo $res | ConvertFrom-JSON
         $fleet_id = $fleet_json.FleetAttributes.FleetId
 
-        # TODO: Create loop waiting Fleet to became ready
-        # $fleet_id
-        # $fleet_status = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
+        # Wait the fleet status to became "ACTIVE"
         $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json"
         $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
 
