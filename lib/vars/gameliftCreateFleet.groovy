@@ -22,8 +22,8 @@ def call(Map conf) {
             " `"${env:UE5_INBOUND_PERMS_RDP}`"" + `
             " --fleet-type `"${env:UE5_FLEET_TYPE}`"" + `
             " --runtime-configuration `"${env:UE5_RUNTIME_CONFIG}`"" + `
-            " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`"" + `
-            " --tags `"${env:UE5_FLEET_TAGS}`""
+            " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`""
+            # " --tags `"${env:UE5_FLEET_TAGS}`""
 
         Write-Host Create Fleet Command: $cmdCreateFleet
 
