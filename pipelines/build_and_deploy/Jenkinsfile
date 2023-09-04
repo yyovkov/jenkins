@@ -154,7 +154,8 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    gameliftBuild()
+                                    // TODO: Uncomment for IN PRODUCTION
+                                    // gameliftBuild()
                                 }
                             }
                         }
@@ -232,13 +233,17 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        env._gamelift_build_arn = gameliftDeploy(
-                                            buildName:      "${env.buildName}", 
-                                            buildVersion:   "${env.buildVersion}",
-                                            buildFolder:    "${env.buildFolder}",
-                                            serverOS:       "${env.OPERATING_SYSTEM}",
-                                            awsRegion:      "${env.AWS_REGION}"
-                                        )
+                                        // TODO: Uncomment for IN PRODUCTION
+                                        // env._gamelift_build_arn = gameliftDeploy(
+                                        //     buildName:      "${env.buildName}", 
+                                        //     buildVersion:   "${env.buildVersion}",
+                                        //     buildFolder:    "${env.buildFolder}",
+                                        //     serverOS:       "${env.OPERATING_SYSTEM}",
+                                        //     awsRegion:      "${env.AWS_REGION}"
+                                        // )
+
+                                        // TODO: Remove for IN PRODUCTION
+                                        env._gamelift_build_arn = "arn:aws:gamelift:us-east-2:748866342572:build/build-784d33d0-25ce-42cf-a4d9-3f617cc8e5d2"
 
                                         gameliftTagResources(
                                             resource_arn:       "${env:_gamelift_build_arn}",
@@ -252,25 +257,26 @@ pipeline {
 
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
 
-                                        env._gamelift_fleet_arn = gameliftCreateFleet(
-                                            awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                            awsRegion:       "${env.AWS_REGION}",
-                                            buildArn:        "${env._gamelift_build_arn}",
-                                            runTimeConfig:   "${env.runTimeConfig}",
-                                            fleetName:       "${env.fleetName}",
-                                        )
+                                        // TODO: Uncomment for IN PRODUCTION
+                                        // env._gamelift_fleet_arn = gameliftCreateFleet(
+                                        //     awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                        //     awsRegion:       "${env.AWS_REGION}",
+                                        //     buildArn:        "${env._gamelift_build_arn}",
+                                        //     runTimeConfig:   "${env.runTimeConfig}",
+                                        //     fleetName:       "${env.fleetName}",
+                                        // )
 
-                                        gameliftTagResources(
-                                            resource_arn:       "${env:_gamelift_fleet_arn}",
-                                            jenkins_build_id:   "${env:BUILD_ID}",
-                                            jenkins_build_url:  "${env:BUILD_URL}",
-                                            jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
-                                            jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                            reource_customer:   "${params:CUSTOMER}",
-                                            resource_owner:     "${params:OWNER}",
-                                        )
+                                        // gameliftTagResources(
+                                        //     resource_arn:       "${env:_gamelift_fleet_arn}",
+                                        //     jenkins_build_id:   "${env:BUILD_ID}",
+                                        //     jenkins_build_url:  "${env:BUILD_URL}",
+                                        //     jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
+                                        //     jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
+                                        //     reource_customer:   "${params:CUSTOMER}",
+                                        //     resource_owner:     "${params:OWNER}",
+                                        // )
 
-                                        echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
+                                        // echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
                                     }
                                 }
                             }
