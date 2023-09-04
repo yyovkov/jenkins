@@ -246,8 +246,8 @@ pipeline {
                                             jenkins_build_url:  "${env:BUILD_URL}",
                                             jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
                                             jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                            reource_customer:   "${env:CUSTOMER}",
-                                            resource_owner:     "${env:OWNER}",
+                                            reource_customer:   "${params:CUSTOMER}",
+                                            resource_owner:     "${params:OWNER}",
                                         )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
@@ -266,8 +266,8 @@ pipeline {
                                             jenkins_build_url:  "${env:BUILD_URL}",
                                             jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
                                             jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                            reource_customer:   "${env:CUSTOMER}",
-                                            resource_owner:     "${env:OWNER}",
+                                            reource_customer:   "${params:CUSTOMER}",
+                                            resource_owner:     "${params:OWNER}",
                                         )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
