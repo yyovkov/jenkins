@@ -23,7 +23,6 @@ def call(Map conf) {
         }
     }
 
-
     ServerProcesses = [[
         'LaunchPath': path,
         'ConcurrentExecutions': conf.concExe

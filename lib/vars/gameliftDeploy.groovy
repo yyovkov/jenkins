@@ -14,17 +14,19 @@ def call(Map conf) {
             " --build-root `"${env:UE5_BUILD_ROOT}`"" + `
             " --operating-system `"${env:UE5_SERVER_OS}`"" + `
             " --region `"${env:UE5_AWS_REGION}`""
+            
         Write-Host Upload Build Command: $cmdUploadBuild
-        # TODO: Uncomment in production
-        # Invoke-Expression $cmdBuildServer
+
+        $res = Invoke-Expression $cmdUploadBuild
+        Write-Output $res
+        $build_id =  (echo $res | Select-String -Pattern "^Build Id:").ToString().Split(" ")[-1]
+        Write-Host Build ID: $build_id
 
         # TODO: Replace below viktorism with check
         Write-Host "Wait for 5 sec to move build state to READY"
         sleep(5)
-        Write-Host "Done"
 
-        $res = Invoke-Expression $cmdUploadBuild
-        Write-Output $res
+        return $build_id
     '''
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
