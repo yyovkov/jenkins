@@ -27,11 +27,11 @@ def call(Map conf) {
 
         $res = Invoke-Expression $cmdCreateFLeet
         $fleet_json = echo $res | ConvertFrom-JSON
-        $fleet_arnd = $fleet_json.FleetAttributes.FleetArn
+        $fleet_arn = $fleet_json.FleetAttributes.FleetArn
 
         # Wait the fleet status to became "ACTIVE"
         $fleetFinalStatuses = @("ACTIVE", "ERROR", "DELETING", "TERMINATED")
-        $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_arnd} | ConvertFrom-Json"
+        $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_arn} | ConvertFrom-Json"
         $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
         Write-Host Fleet arn: $fleet_arn. Waiting for Fleet status.
 
@@ -42,7 +42,7 @@ def call(Map conf) {
                 if ($fleet_status.Equals("ACTIVE")) {
                     break StatusActive
                 } else {
-                    throw "Fleet $fleet_arnd failed with status $fleet_status."
+                    throw "Fleet $fleet_arn failed with status $fleet_status."
                     exit 5
                 }
             }
