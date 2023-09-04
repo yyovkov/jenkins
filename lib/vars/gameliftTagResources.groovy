@@ -13,7 +13,7 @@ def call(Map conf) {
         $ErrorActionPreference = "Stop"
         $cmdTagResource = "& aws --region us-east-2 " + `
             " gamelift tag-resource " + `
-            " --resource-arn `"${RESOURCE_ARN}`"" + `
+            " --resource-arn `"${env:RESOURCE_ARN}`"" + `
             " --tags `"Key=jenkins,Value=true`"" + `
             " `"Key=jenkins_build_id,Value=${env:JENKINS_BUILD_ID}`"" + `
             " `"Key=jenkins_build_url,Value=${env:JENKINS_BUILD_URL}`"" + `
