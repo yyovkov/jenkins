@@ -165,7 +165,8 @@ pipeline {
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
                                 echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    gameliftBuild()
+                                    // TODO: Uncomment for IN PRODUCTION
+                                    // gameliftBuild()
                                 }
                             }
                         }
@@ -243,23 +244,27 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        env._gamelift_build_arn = gameliftDeploy(
-                                            buildName:      "${env.buildName}", 
-                                            buildVersion:   "${env.buildVersion}",
-                                            buildFolder:    "${env.buildFolder}",
-                                            serverOS:       "${env.OPERATING_SYSTEM}",
-                                            awsRegion:      "${env.AWS_REGION}"
-                                        )
+                                        // TODO: Remove for IN PRODUCTION
+                                        env._gamelift_build_arn = "arn:aws:gamelift:us-east-2:748866342572:build/build-04f7d109-4ddd-4a03-ae0d-b0aaef1df6d7"
 
-                                        gameliftTagResources(
-                                            resource_arn:       "${env:_gamelift_build_arn}",
-                                            jenkins_build_id:   "${env:BUILD_ID}",
-                                            jenkins_build_url:  "${env:BUILD_URL}",
-                                            jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
-                                            jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                            reource_customer:   "${params:CUSTOMER}",
-                                            resource_owner:     "${params:OWNER}",
-                                        )
+                                        // TODO: Uncomment for IN PRODUCTION
+                                        // env._gamelift_build_arn = gameliftDeploy(
+                                        //     buildName:      "${env.buildName}", 
+                                        //     buildVersion:   "${env.buildVersion}",
+                                        //     buildFolder:    "${env.buildFolder}",
+                                        //     serverOS:       "${env.OPERATING_SYSTEM}",
+                                        //     awsRegion:      "${env.AWS_REGION}"
+                                        // )
+
+                                        // gameliftTagResources(
+                                        //     resource_arn:       "${env:_gamelift_build_arn}",
+                                        //     jenkins_build_id:   "${env:BUILD_ID}",
+                                        //     jenkins_build_url:  "${env:BUILD_URL}",
+                                        //     jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
+                                        //     jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
+                                        //     reource_customer:   "${params:CUSTOMER}",
+                                        //     resource_owner:     "${params:OWNER}",
+                                        // )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
 
