@@ -27,12 +27,19 @@ def call(Map conf) {
 
         Write-Host Create Fleet Command: $cmdCreateFleet
 
-        # TODO: Resolve this Victorism. The Fleed ID should be obtained from 
-        # the command creating the fleet.
-        $cmdGetFleetsForBuild = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
-            " gamelift list-fleets" + `
-            " --build-id `"${env:UE5_BUILD_ID}`"" + `
-            " --query `"FleetIds[0]`""
+        $res = Invoke-Expression $cmdCreateFLeet
+        $fleet_json = echo $res | ConvertFrom-JSON
+        $fleet_id = $fleet_json.FleetAttributes.FleetId
+
+        # TODO: Create loop waiting Fleet to became ready
+        # $fleet_id
+        # $fleet_staus = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
+        $fleet_status = "Unknown"
+        while(!$fleet_status.Equals("ACTIVE")){
+            sleep 60
+            $fleet_staus = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
+            Write-Host Fleet status: $fleet_status
+        }
 
         Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
     '''
