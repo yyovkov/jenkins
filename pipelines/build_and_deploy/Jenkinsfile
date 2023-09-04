@@ -226,7 +226,9 @@ pipeline {
                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
-                                    env._test_me = "Some code here"
+                                    script {
+                                        env._test_me = "Some code here"
+                                    }
                                     env._gamelift_build_id = gameliftDeploy(
                                         buildName:      "${env.buildName}", 
                                         buildVersion:   "${env.buildVersion}",
