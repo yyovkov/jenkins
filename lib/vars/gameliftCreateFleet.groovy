@@ -1,9 +1,5 @@
 def call(Map conf) {
 
-    // $cmdWrite = "& Write-Output blablabla"
-    // $res = Invoke-Expression $cmdWrite
-    // echo $res
-
     env.UE5_AWS_INSTANCE_TYPE  = conf.awsInstanceType
     env.UE5_AWS_REGION         = conf.awsRegion
     env.UE5_BUILD_ID           = conf.buildArn
@@ -15,6 +11,7 @@ def call(Map conf) {
     env.UE5_SESSION_PROTECTION = "NoProtection"
 
     powershell '''
+        $ErrorActionPreference = "Stop"
         $cmdCreateFleet = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
             " gamelift create-fleet" + `
             " --name `"${env:UE5_FLEET_NAME}`"" + `

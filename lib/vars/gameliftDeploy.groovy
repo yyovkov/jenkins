@@ -9,6 +9,7 @@ def call(Map conf) {
 
     // def buildArn = powershell(returnStdout: true, script: '''
     def buildArn = powershell(returnStdout: true, script: '''
+        $ErrorActionPreference = "Stop"
         $cmdUploadBuild = "& aws gamelift upload-build" + `
             " --name `"${env:UE5_BUILD_NAME}`"" + `
             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
@@ -28,14 +29,14 @@ def call(Map conf) {
             " --build-id $build_id" + `
             " --output json | ConvertFrom-Json"
         $build_arn = (Invoke-Expression $cmdBuildDescribe).Build.BuildArn
-        Write-Host Build ID: $build_arn
+        Write-Host Build ARN: $build_arn
 
         # TODO: Replace below viktorism with check of describe-build
         Write-Host "Wait for 5 sec to move build state to READY"
         sleep(5)
 
         # The value assigned to Write-Output will be saved as Groovy variable
-        Write-Output $buildArn
+        Write-Output $build_arn
     ''')
 
     return buildArn.trim()
