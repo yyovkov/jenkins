@@ -10,38 +10,47 @@ pipeline {
     options {
         timestamps()
         parallelsAlwaysFailFast()
+        disableConcurrentBuilds()
     }
 
     parameters {
         booleanParam(name: 'BUILD_LINUX_SERVER', defaultValue: true, description: 'Use Linux for server')
         booleanParam(name: 'ENABLE_CLIENT_GAMECAST', defaultValue: false, description: 'Build and deploy GameCast client')
-        booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: true, description: 'Build and deploy PureWeb client')
+        booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: false, description: 'Build and deploy PureWeb client')
         // 
-        choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.2xlarge', 'c5.xlarge', 'c5.large'])
+        choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.large', 'c5.xlarge', 'c5.2xlarge'])
         choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
-        choice(name: 'SERVER_CONFIG', choices: ['Development', 'Shipping'])
-        choice(name: 'TARGET_CONNECTION', choices: ['CC_Dev', 'CC_Prod'])
+        choice(name: 'SERVER_CONFIG', choices: ['Shipping', 'Development'])
+        choice(name: 'TARGET_CONNECTION', choices: ['CC_Sales', 'CC_Dev', 'CC_Prod'])
         // 
-        string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region to which the build will be deployed')
-        string(name: 'BUILD_DIR', defaultValue: 'D:/Projects/Mytaverse/PlasticSCM', description: 'Directory in which the PlasticSCM code is checked out and where the build are triggered out from.')
-        string(name: 'PACKAGE_PATH', defaultValue: 'D:/Artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
+        string(name: 'AWS_CONCURRENT_EXECUTIONS', defaultValue: '4')
+        string(name: 'AWS_REGION', defaultValue: 'us-east-2', description: 'AWS Region to which the build will be deployed')
+        string(name: 'CUSTOMER', defaultValue: 'unknown', description: 'Customer related to this Build')
+        string(name: 'PACKAGE_PATH', defaultValue: 'D:/jenkins_yovko/artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
         string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
         string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
-        string(name: 'MYTA_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
-        string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main', description: 'PlasticSCM Branch.')
+        string(name: 'OWNER', defaultValue: 'unknown' , description: 'Mytaverse person that can answer questions, whether this build should be removed or not.')
+        string(name: 'PLASTICSCM_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
+        string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main/TourLabs', description: 'PlasticSCM Branch.')
         string(name: 'SERVER_BUILD_FLAGS', defaultValue: '-build -cook -package -stage -archive -pak -allmaps -server -noclient -target=MytaverseServer')
-        string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52/', description: 'Viktor to add description for this variable')
+        string(name: 'UE_ENGINE', defaultValue: 'D:/ue5_source/ue_52', description: 'Viktor to add description for this variable')
     }
 
     environment {
-        BITBUCKET_CREDENTIALS_ID = 'ssh-bitbucket-infra-ro'
+        GIT_CREDENTIALS_ID = 'gh-deploy-key'
         CRED_CICD = credentials('cicd_server')
+        LINUX_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/LinuxServer"
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
+        PACKAGE_NUMBER = "${env.BUILD_NUMBER}"
         PLATFORM = "${params.BUILD_LINUX_SERVER ? "Linux" : "Win64"}" // was: GAMELIFT_PLATFORM
         PLASTICSCM_TARGET_SERVER = 'Mytaverse@cloud'
         PLASTICSCM_TARGET_REPOSITORY = 'Paradox'
-        PROJECT_PATH = "${params.BUILD_DIR}" + '/Mytaverse.uproject'
-        UAT_PATH = "${UE_ENGINE}" + '/Engine/Build/BatchFiles/RunUAT.bat'
+        PLASTICSCM_LOCAL_PATH = "${env.WORKSPACE}/${env.PLASTICSCM_TARGET_REPOSITORY}"
+        PROJECT_PATH = "${env.PLASTICSCM_LOCAL_PATH}" + '/Mytaverse.uproject'
+        SERVER_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/WindowsServer"
+        UAT_PATH = "${UE_ENGINE}" + "/Engine/Build/BatchFiles/RunUAT.bat"
+
+        buildFolder = "${params.BUILD_LINUX_SERVER ? "${env.LINUX_BUILD_ROOT}" : "${env.SERVER_BUILD_ROOT}"}"
     }
 
     stages {
@@ -65,39 +74,46 @@ pipeline {
                 script {
                     plasticVars = cm(
                         branch:         "${params:PLASTICSCM_BRANCH}",
-                        changeset:      "${env:MYTA_CHANGESET}",
+                        changeset:      "${env:PLASTICSCM_CHANGESET}",
                         cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
                         changelog:      true,
-                        credentialsId:  "${env.BITBUCKET_CREDENTIALS_ID}",
+                        credentialsId:  "${env.GIT_CREDENTIALS_ID}",
                         poll:           false,
                         repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
                         server:         "${env.PLASTICSCM_TARGET_SERVER}",
                         workingMode:    "LDAP",
-                        // directory:      "${params:BUILD_DIR}"
-                        directory:      "${env.PLASTICSCM_TARGET_REPOSITORY}"
+                        directory:      "${env.PLASTICSCM_LOCAL_PATH}"
                     )
 
                     env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
                     env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
                     env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
                 }
-                powershell "dir env:"
             }
         }
 
         stage('Setup dynamic environment') {
             steps {
                 script {
-                    // Setup SENTRY_URL bassed on TARGET_CONNECTION parameter
                     switch(params.TARGET_CONNECTION) {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
+                            env.FLEETNAMEPART = "Prod"
                             break
                         case 'CC_Dev':
                             env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
+                            env.FLEETNAMEPART = "Dev"
+                            break
+                        case 'CC_Sales':
+                            env.SENTRY_URL = "https://3e959cc9acd8d5e4a997e31340ae4107@o993426.ingest.sentry.io/4505664040927232"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
+                            env.FLEETNAMEPART = "Sales"
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
+                            env.FLEETNAMEPART = "Prod"
                             break
                     }
                     switch(params.CHANGESET_TYPE) {
@@ -107,6 +123,30 @@ pipeline {
                             break
                         default:
                             break
+                    }
+                     
+                    // Current build vairables
+                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId
+                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
+
+                    // Setup default resource tags
+                    env._TAGS = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_build_url,Value=${env.BUILD_URL}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_id,Value=${env.BUILD_TRIGGERED_BY_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_name,Value=${env.BUILD_TRIGGERED_BY_NAME}\""
+                    env._TAGS = "${env._TAGS} \"Key=reource_customer,Value=${params:CUSTOMER}\""
+                    env._TAGS = "${env._TAGS} \"Key=reource_owner,Value=${params:OWNER}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_author,Value=${env.PLASTICSCM_AUTHOR}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_id,Value=${env.PLASTICSCM_CHANGESET_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_guid,Value=${env.PLASTICSCM_CHANGESET_GUID}\""
+                    env._TAGS = "${env._TAGS} \"Key=target_connection,Value=${params.TARGET_CONNECTION}\""
+
+                    // Print all variables for debugging reasons
+                    if (isUnix()) {
+                        sh '''env'''
+                    }
+                    else {
+                        powershell '''dir env:'''
                     }
                 }
             }
@@ -124,32 +164,128 @@ pipeline {
                                 // New  Code
                                 echo "Server GameLift Build"
                                 echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
-                                echo "PLATFORM: ${env.OPERATING_SYSTEM}"
-                                dir("${params.BUILD_DIR}"){
+                                echo "PLATFORM: ${env.PLATFORM}"
+                                dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     gameliftBuild()
                                 }
                             }
                         }
-                        // stage('Copy Build') {
-                        //     when {
-                        //         expression {return params.BUILD_LINUX_SERVER}
-                        //     }
-                        //     steps {
-                        //         bat """
-                        //             XCopy "%BUILD_DIR%\\Build\\WindowsServer" "%PACKAGE_PATH%\\%BUILD_NUMBER%\\WindowsServer" /E /H /C /I
-                        //         """
-                        //     }
-                        // }
-                        stage('Server GameLift Deploy'){
+                        stage('Copy Build to AWS Build folder') {
+                            when {
+                                expression  {params.BUILD_LINUX_SERVER == false }
+                            }
                             steps {
-                                gameliftDeploy()
+                                powershell '''
+                                    $buildSourceDir = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Build `
+                                        | Join-Path -ChildPath WindowsServer
+                                    $buildDestDir = Join-Path ${env:PACKAGE_PATH} ${env:BUILD_NUMBER} `
+                                        | Join-Path -ChildPath WindowsServer
+                                    $cmdXCopy = "& XCopy $buildSourceDir $buildDestDir /E /H /C /I"
+
+                                    Write-Host Command to copy build: $cmdXCopy
+                                    Invoke-Expression $cmdXCopy
+                                '''
+                            }
+                        }
+                        stage('Clean Fleets'){
+                            steps {
+                                script {
+                                    withCredentials([aws(
+                                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                                    accessKeyVariable: '_AWS_ACCESS_KEY_ID',
+                                                    secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
+                                        dir("${env:PLASTICSCM_LOCAL_PATH}") {
+                                            powershell '''
+                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                    | Join-Path -ChildPath aws `
+                                                    | Join-Path -ChildPath AWSHelper.exe
+                                                $cmdFleetCmd = "& $cleanFleetExe" + `
+                                                    "${env:_AWS_ACCESS_KEY_ID}" + ` 
+                                                    " ${env:_AWS_SECRET_ACCESS_KEY}"  + `
+                                                    " ${env:AWS_REGION}"
+
+                                                Write-Host "Clean Fleets Command: $cmdFleetCmd"
+                                                # TODO: Uncomment for production
+                                                # Invoke-Expression $cmdFleetCm
+                                            '''
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        stage('Upload GameLift Build') {
+                            steps {
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+
+                                    script {
+                                        
+                                        // TODO: Change snakecaset to uppercase
+                                        env.GAMLIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
+                                        env.GAMLIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
+
+                                        echo "GAMLIFT_BUILD_NAME: ${GAMLIFT_BUILD_NAME}"
+                                        echo "GAMLIFT_BUILD_VERSION: ${GAMLIFT_BUILD_VERSION}"
+
+                                        env._gamelift_build_arn = gameliftDeploy(
+                                            buildName:      "${env.GAMLIFT_BUILD_NAME}", 
+                                            buildVersion:   "${env.GAMLIFT_BUILD_VERSION}",
+                                            buildFolder:    "${env.buildFolder}",
+                                            serverOS:       "${env.OPERATING_SYSTEM}",
+                                            awsRegion:      "${env.AWS_REGION}"
+                                        )
+
+                                        gameliftTagResources(
+                                            resource_arn:   "${env:_gamelift_build_arn}",
+                                            buildTags:      "${env:_TAGS}"
+                                        )
+
+                                        echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
+
+                                    }
+                                }
+                            }
+                        }
+                        stage('GameLift Create Fleet'){
+                            steps {
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+
+                                    script {
+                                        // Setup GameLift variables
+                                        env._runtime_config = gameliftRuntimeConfig(
+                                            os:      "${env.OPERATING_SYSTEM}",
+                                            config:  "${env.SERVER_CONFIG}", 
+                                            concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
+                                        )
+                                        env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
+                                        env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
+                                        echo "runTimeConfig: ${env.runTimeConfig}"
+                                        echo "fleetName: ${fleetName}"
+
+                                        env._gamelift_fleet_arn = gameliftCreateFleet(
+                                            awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                            awsRegion:       "${env.AWS_REGION}",
+                                            buildArn:        "${env._gamelift_build_arn}",
+                                            runTimeConfig:   "${env.runTimeConfig}",
+                                            fleetName:       "${env.fleetName}",
+                                            fleetTags:       "${env._TAGS}"
+                                        )
+
+                                        echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
+                                    }
+                                }
                             }
                         }
                     }
                 }
                 stage('Client GameCast Build and Deploy') {
                     when {
-                        expression {params.ENABLE_CLIENT_GAMECAST == true}
+                        expression {params.ENABLE_CLIENT_GAMECAST == true }
                     }
                     stages {
                         stage('Client GameCast Build') {

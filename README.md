@@ -31,7 +31,7 @@ alias jenkins-cli="java -jar /tmp/jenkins-cli.jar -s ${JENKINS_HOST} -auth ${JEN
 export FOLDER_NAME="mytaverse"
 export FOLDER_SLOGAN="Mytaverse"
 export FOLDER_DESCRIPTION="Mytaverse Pipelines to build and deploy UE5"
-jenkins-cli create-job ${FOLDER_NAME} <<< $(envsubst < templates/folder.xml)
+jenkins-cli create-job ${FOLDER_NAME} <<< $(envsubst < templates/pipeline/folder.xml)
 ```
 
 ## Create Jenkins job from git
@@ -63,7 +63,26 @@ Where:
 ### Create the pipeline
 
 ``` bash
-jenkins-cli create-job ${JOB_FOLDER}/${JOB_NAME} <<< $(envsubst < templates/job_git.xml)
+jenkins-cli create-job ${JOB_FOLDER}/${JOB_NAME} <<< $(envsubst < templates/pipeline/job_git.xml)
+```
+
+## Create Jenkins Credentials
+
+### AWS Credentials for GameLift deploy in Sandbox
+
+* Setup variables
+
+``` bash
+export CREDS_ID=aws-gamelift-sand
+export CREDS_DESCRIPTION="AWS Credential used for GameLift Deployment in Sandbox"
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+```
+
+* Create the credentials
+
+``` bash
+jenkins-cli create-credentials-by-xml system::system::jenkins _ <<< $(envsubst < templates/secrets/aws.xml)
 ```
 
 ## Notes (Delme when finish)
@@ -84,7 +103,7 @@ var latestStableId = await cmHelper.GetLatestByPattern(pattern);
 Console.WriteLine($"Exit with {latestStableId}");
 return int.Parse(latestStableId);
 
-===== Rusulgint code  ====
+* Resultint code
 
 ``` bash
 var pattern = $"latest-{mainLabelPart}";
