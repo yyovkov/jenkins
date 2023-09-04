@@ -5,6 +5,7 @@ def call(Map conf) {
     env.UE5_BUILD_ID           = conf.buildArn
     env.UE5_RUNTIME_CONFIG     = conf.runTimeConfig
     env.UE5_FLEET_NAME         = conf.fleetName
+    env.UE5_FLEET_TAGS         = conf.fleetTags
     env.UE5_INBOUND_PERMS_SRV  = "FromPort=7777,ToPort=7996,IpRange=0.0.0.0/0,Protocol=UDP" 
     env.UE5_INBOUND_PERMS_RDP  = "FromPort=3389,ToPort=3389,IpRange=0.0.0.0/0,Protocol=TCP"
     env.UE5_FLEET_TYPE         = "ON_DEMAND"
@@ -21,7 +22,8 @@ def call(Map conf) {
             " `"${env:UE5_INBOUND_PERMS_RDP}`"" + `
             " --fleet-type `"${env:UE5_FLEET_TYPE}`"" + `
             " --runtime-configuration `"${env:UE5_RUNTIME_CONFIG}`"" + `
-            " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`""
+            " --new-game-session-protection-policy `"${env:UE5_SESSION_PROTECTION}`"" + `
+            " --tags \"${env.UE5_FLEET_TAGS}\""
 
         Write-Host Create Fleet Command: $cmdCreateFleet
 
@@ -40,7 +42,7 @@ def call(Map conf) {
             Write-Host Fleet status: $fleet_status. Next check in 60 sec.
             if ($fleetFinalStatuses.Contains($fleet_status)) {
                 if ($fleet_status.Equals("ACTIVE")) {
-                    break StatusActive
+                    break
                 } else {
                     throw "Fleet $fleet_arn failed with status $fleet_status."
                     exit 5
@@ -49,7 +51,6 @@ def call(Map conf) {
             sleep 60
         }
 
-        Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
         Write-Output $fleet_arn
     ''')
 

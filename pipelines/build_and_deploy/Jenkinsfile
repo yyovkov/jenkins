@@ -129,6 +129,17 @@ pipeline {
                     env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId 
                     env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
 
+                    // Setup default resource tags
+                    env._TAGS = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_build_url,Value=${env.BUILD_URL}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_id,Value=${env.BUILD_TRIGGERED_BY_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=jenkins_user_name,Value=${env.BUILD_TRIGGERED_BY_NAME}\""
+                    env._TAGS = "${env._TAGS} \"Key=reource_customer,Value=${params:CUSTOMER}\""
+                    env._TAGS = "${env._TAGS} \"Key=reource_customer,Value=${params:OWNER}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_author,Value=${env.PLASTICSCM_AUTHOR}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_id,Value=${env.PLASTICSCM_CHANGESET_ID}\""
+                    env._TAGS = "${env._TAGS} \"Key=plasticscm_changeset_guid,Value=${env.PLASTICSCM_CHANGESET_GUID}\""
+
                     // Print all variables for debugging reasons
                     if (isUnix()) {
                         sh '''env'''
@@ -258,17 +269,18 @@ pipeline {
                                             buildArn:        "${env._gamelift_build_arn}",
                                             runTimeConfig:   "${env.runTimeConfig}",
                                             fleetName:       "${env.fleetName}",
+                                            fleetTags:       "${env._TAGS}"
                                         )
 
-                                        gameliftTagResources(
-                                            resource_arn:       "${env:_gamelift_fleet_arn}",
-                                            jenkins_build_id:   "${env:BUILD_ID}",
-                                            jenkins_build_url:  "${env:BUILD_URL}",
-                                            jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
-                                            jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
-                                            reource_customer:   "${params:CUSTOMER}",
-                                            resource_owner:     "${params:OWNER}",
-                                        )
+                                        // gameliftTagResources(
+                                        //     resource_arn:       "${env:_gamelift_fleet_arn}",
+                                        //     jenkins_build_id:   "${env:BUILD_ID}",
+                                        //     jenkins_build_url:  "${env:BUILD_URL}",
+                                        //     jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
+                                        //     jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
+                                        //     reource_customer:   "${params:CUSTOMER}",
+                                        //     resource_owner:     "${params:OWNER}",
+                                        // )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
                                     }
