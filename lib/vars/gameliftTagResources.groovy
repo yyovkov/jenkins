@@ -24,6 +24,6 @@ def call(Map conf) {
 
         Write-Host Command to tag resource: $cmdTagResource
 
-        Invoke-Expressoin $cmdTagResource
+        Invoke-Expression $cmdTagResource
     '''
 }
