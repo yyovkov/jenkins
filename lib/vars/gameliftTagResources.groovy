@@ -11,7 +11,7 @@ def call(Map conf) {
 
     powershell '''
         $ErrorActionPreference = "Stop"
-        $cmdTagResource = "& aws --region us-east-2 " + 1
+        $cmdTagResource = "& aws --region us-east-2 " + `
             " gamelift tag-resource " + `
             " --resource-arn `"${RESOURCE_ARN}`"" + `
             " --tags `"Key=jenkins,Value=true`"" + `
