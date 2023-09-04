@@ -1,4 +1,4 @@
-def call(Map config) {
+def call(Map conf) {
 
     env.RESOURCE_ARN            = conf.resource_arn
     env.JENKINS_BUILD_ID        = conf.jenkins_build_id
