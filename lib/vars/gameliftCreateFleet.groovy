@@ -6,7 +6,7 @@ def call(Map conf) {
 
     env.UE5_AWS_INSTANCE_TYPE  = conf.awsInstanceType
     env.UE5_AWS_REGION         = conf.awsRegion
-    env.UE5_BUILD_ID           = conf.buildId // Build id from  gameliftDeploy operation
+    env.UE5_BUILD_ID           = conf.buildArn
     env.UE5_RUNTIME_CONFIG     = conf.runTimeConfig
     env.UE5_FLEET_NAME         = conf.fleetName
     env.UE5_INBOUND_PERMS_SRV  = "FromPort=7777,ToPort=7996,IpRange=0.0.0.0/0,Protocol=UDP" 
@@ -30,28 +30,21 @@ def call(Map conf) {
 
         $res = Invoke-Expression $cmdCreateFLeet
         $fleet_json = echo $res | ConvertFrom-JSON
-        $fleet_id = $fleet_json.FleetAttributes.FleetId
+        $fleet_arnd = $fleet_json.FleetAttributes.FleetArn
 
         # Wait the fleet status to became "ACTIVE"
         $fleetFinalStatuses = @("ACTIVE", "ERROR", "DELETING", "TERMINATED")
-        $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json"
+        $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_arnd} | ConvertFrom-Json"
         $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
-
-        # TODO: Check for statuses "ACTIVE", "ERROR", "DELETING", "TERMINATING"
-        # while(!$fleet_status.Equals("ACTIVE")){
-        #     Write-Host Fleet $fleet_id status: $fleet_status. Next check in 60 sec.
-        #     sleep 60
-        #     $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
-        # }
 
         while("True"){
             $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
-            Write-Host Fleet $fleet_id status: $fleet_status. Next check in 60 sec.
+            Write-Host Fleet $fleet_arnd status: $fleet_status. Next check in 60 sec.
             if ($fleetFinalStatuses.Contains($fleet_status)) {
                 if ($fleet_status.Equals("ACTIVE")) {
                     break StatusActive
                 } else {
-                    throw "Fleet $fleet_id failed with status $fleet_status."
+                    throw "Fleet $fleet_arnd failed with status $fleet_status."
                     exit 5
                 }
             }

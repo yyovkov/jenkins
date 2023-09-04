@@ -7,8 +7,8 @@ def call(Map conf) {
     env.UE5_SERVER_OS       = conf.serverOS
     env.UE5_AWS_REGION      = conf.awsRegion
 
-    // def buildId = powershell(returnStdout: true, script: '''
-    def buildId = powershell(returnStdout: true, script: '''
+    // def buildArn = powershell(returnStdout: true, script: '''
+    def buildArn = powershell(returnStdout: true, script: '''
         $cmdUploadBuild = "& aws gamelift upload-build" + `
             " --name `"${env:UE5_BUILD_NAME}`"" + `
             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
@@ -22,15 +22,21 @@ def call(Map conf) {
         # Pringint the full output is long and not very helpful, so commented
         # Write-Host $res 
         $build_id =  (echo $res | Select-String -Pattern "^Build Id:").ToString().Split(" ")[-1]
-        Write-Host Build ID: $build_id
+        # Change return value to build arn (build_arn)
+        $cmdBuildDescribe = "& aws --region us-east-2" + `
+            " gamelift describe-build" + `
+            " --build-id $build_id" + `
+            " --output json | ConvertFrom-Json"
+        $build_arn = (Invoke-Expression $cmdBuildDescribe).Build.BuildArn
+        Write-Host Build ID: $build_arn
 
         # TODO: Replace below viktorism with check of describe-build
         Write-Host "Wait for 5 sec to move build state to READY"
         sleep(5)
 
-        # return $build_id
-        Write-Output $build_id
+        # The value assigned to Write-Output will be saved as Groovy variable
+        Write-Output $buildArn
     ''')
 
-    return buildId.trim()
+    return buildArn.trim()
 }
