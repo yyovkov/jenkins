@@ -51,7 +51,7 @@ def call(Map conf) {
                 if ($fleet_status.Equals("ACTIVE")) {
                     break StatusActive
                 } else {
-                    throw "Fleet $fleet_id failed with status $fleet_status.
+                    throw "Fleet $fleet_id failed with status $fleet_status."
                     exit 5
                 }
             }
