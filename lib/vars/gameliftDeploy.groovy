@@ -7,7 +7,7 @@ def call(Map conf) {
     env.UE5_SERVER_OS       = conf.serverOS
     env.UE5_AWS_REGION      = conf.awsRegion
 
-    powershell '''
+    def buildId = powershell('''
         $cmdUploadBuild = "& aws gamelift upload-build" + `
             " --name `"${env:UE5_BUILD_NAME}`"" + `
             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
@@ -18,7 +18,8 @@ def call(Map conf) {
         Write-Host Upload Build Command: $cmdUploadBuild
 
         $res = Invoke-Expression $cmdUploadBuild
-        Write-Output $res
+        # TODO: Print output only in case of failure?
+        # Write-Output $res 
         $build_id =  (echo $res | Select-String -Pattern "^Build Id:").ToString().Split(" ")[-1]
         Write-Host Build ID: $build_id
 
@@ -27,8 +28,8 @@ def call(Map conf) {
         sleep(5)
 
         return $build_id
-    '''
+    ''')
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
-    // return UE5_BUILD_ID
+    return buildId
 }
