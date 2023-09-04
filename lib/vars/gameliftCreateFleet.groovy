@@ -10,7 +10,7 @@ def call(Map conf) {
     env.UE5_FLEET_TYPE         = "ON_DEMAND"
     env.UE5_SESSION_PROTECTION = "NoProtection"
 
-    powershell '''
+    def fleetArn = powershell(returnStdout: true, script: '''
         $ErrorActionPreference = "Stop"
         $cmdCreateFleet = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
             " gamelift create-fleet" + `
@@ -50,5 +50,8 @@ def call(Map conf) {
         }
 
         Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
-    '''
+        Write-Output $fleet_arn
+    ''')
+
+    return $fleetArn.trim()
 }

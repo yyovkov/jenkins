@@ -113,6 +113,8 @@ pipeline {
                             env.SENTRY_URL = "not_setup"
                             env.FLEETNAMEPART = "Prod"
                             break
+                        env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId 
+                        env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
                     }
                     switch(params.CHANGESET_TYPE) {
                         case 'latest-stable':
@@ -232,17 +234,39 @@ pipeline {
                                             serverOS:       "${env.OPERATING_SYSTEM}",
                                             awsRegion:      "${env.AWS_REGION}"
                                         )
+
+                                        gameliftTagResources(
+                                            resource_arn:       "${env:_gamelift_build_arn}",
+                                            jenkins_build_id:   "${env:BUILD_ID}",
+                                            jenkins_build_url:  "${env:BUILD_URL}",
+                                            jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
+                                            jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
+                                            reource_customer:   "${env:CUSTOMER}",
+                                            resource_owner:     "${env:OWNER}",
+                                        )
+
+                                        echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
+
+                                        env._gamelift_fleet_arn = gameliftCreateFleet(
+                                            awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                            awsRegion:       "${env.AWS_REGION}",
+                                            buildArn:        "${env._gamelift_build_arn}",
+                                            runTimeConfig:   "${env.runTimeConfig}",
+                                            fleetName:       "${env.fleetName}",
+                                        )
+
+                                        gameliftTagResources(
+                                            resource_arn:       "${env:_gamelift_fleet_arn}",
+                                            jenkins_build_id:   "${env:BUILD_ID}",
+                                            jenkins_build_url:  "${env:BUILD_URL}",
+                                            jenkins_user_id:    "${env:BUILD_TRIGGERED_BY_ID}",
+                                            jenkins_user_name:  "${env:BUILD_TRIGGERED_BY_NAME}",
+                                            reource_customer:   "${env:CUSTOMER}",
+                                            resource_owner:     "${env:OWNER}",
+                                        )
+
+                                        echo "Gamelift Build Arn: ${env._gamelift_fleet_arn}"
                                     }
-
-                                    echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
-
-                                    gameliftCreateFleet(
-                                        awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                        awsRegion:       "${env.AWS_REGION}",
-                                        buildArn:        "${env._gamelift_build_arn}",
-                                        runTimeConfig:   "${env.runTimeConfig}",
-                                        fleetName:       "${env.fleetName}",
-                                    )
                                 }
                             }
                         }
