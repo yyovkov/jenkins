@@ -25,11 +25,11 @@ pipeline {
         // 
         string(name: 'AWS_CONCURRENT_EXECUTIONS', defaultValue: '4')
         string(name: 'AWS_REGION', defaultValue: 'us-east-2', description: 'AWS Region to which the build will be deployed')
-        string(name: 'CUSTOMER', defaultValue: ' ', description: 'Customer related to this Build')
+        string(name: 'CUSTOMER', defaultValue: 'unknown', description: 'Customer related to this Build')
         string(name: 'PACKAGE_PATH', defaultValue: 'D:/jenkins_yovko/artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
         string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
         string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
-        string(name: 'OWNER', defaultValue: ' ', description: 'Mytaverse person that can answer questions, whether this build should be removed or not.')
+        string(name: 'OWNER', defaultValue: 'unknown' , description: 'Mytaverse person that can answer questions, whether this build should be removed or not.')
         string(name: 'PLASTICSCM_CHANGESET', defaultValue: '', description: 'PlasticSCM Changeset to be used for build and deploy.')
         string(name: 'PLASTICSCM_BRANCH', defaultValue: '/Main/TourLabs', description: 'PlasticSCM Branch.')
         string(name: 'SERVER_BUILD_FLAGS', defaultValue: '-build -cook -package -stage -archive -pak -allmaps -server -noclient -target=MytaverseServer')
