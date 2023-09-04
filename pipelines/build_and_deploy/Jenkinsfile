@@ -240,8 +240,6 @@ pipeline {
                                             awsRegion:      "${env.AWS_REGION}"
                                         )
 
-                                        env._gamelift_build_arn = "arn:aws:gamelift:us-east-2:748866342572:build/build-784d33d0-25ce-42cf-a4d9-3f617cc8e5d2"
-
                                         gameliftTagResources(
                                             resource_arn:       "${env:_gamelift_build_arn}",
                                             jenkins_build_id:   "${env:BUILD_ID}",
