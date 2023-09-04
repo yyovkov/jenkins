@@ -35,5 +35,6 @@ def call(Map conf) {
     ''')
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
+    println 'Groovy buildId: ' + buildId
     return buildId
 }
