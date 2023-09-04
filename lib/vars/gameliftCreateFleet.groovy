@@ -34,12 +34,14 @@ def call(Map conf) {
 
         # TODO: Create loop waiting Fleet to became ready
         # $fleet_id
-        # $fleet_staus = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
-        $fleet_status = "Unknown"
+        # $fleet_status = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
+        $cmdGetFleetStatus = "& aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json"
+
+        $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
         while(!$fleet_status.Equals("ACTIVE")){
             sleep 60
-            $fleet_staus = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
-            Write-Host Fleet status: $fleet_status
+            $fleet_status = (aws --region us-east-2 gamelift describe-fleet-attributes --fleet-id ${fleet_id} | ConvertFrom-Json).FleetAttributes.Status
+            Write-Host Fleet status: $fleet_status ($fleet_id)
         }
 
         Write-Host Get Fleet for Build: $cmdGetFleetsForBuild
