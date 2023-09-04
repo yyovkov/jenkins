@@ -31,7 +31,7 @@ def call(Map conf) {
 
         # return $build_id
         return "build-id-xxx-bbb-ccc-aaa"
-        # Write-Output "build-id-xxx-bbb-ccc-aaa"
+        Write-Output "build-id-xxx-bbb-ccc-aaa"
     ''')
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
