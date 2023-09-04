@@ -7,7 +7,8 @@ def call(Map conf) {
     env.UE5_SERVER_OS       = conf.serverOS
     env.UE5_AWS_REGION      = conf.awsRegion
 
-    def buildId = powershell('''
+    // def buildId = powershell(returnStdout: true, script: '''
+    def buildId = powershell(script: '''
         $cmdUploadBuild = "& aws gamelift upload-build" + `
             " --name `"${env:UE5_BUILD_NAME}`"" + `
             " --build-version `"${env:UE5_BUILD_VERSION}`"" + `
@@ -28,8 +29,8 @@ def call(Map conf) {
         # Write-Host "Wait for 5 sec to move build state to READY"
         # sleep(5)
 
-        # return $build_id
-        return "build-id-xxx-bbb-ccc-aaa"
+        eturn $build_id
+        # Write-Output "build-id-xxx-bbb-ccc-aaa"
     ''')
 
     // TODO: Return build id from the `aws gamelift upload-build` command above
