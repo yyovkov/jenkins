@@ -93,6 +93,7 @@ pipeline {
 
                     env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
                     env.GAMELIFT_BUILD_NAME = "${env.CUSTOMER}-${env.GAMELIFT_BUILD_VERSION}-${env.FLEETNAMEPART}"
+                    env.GAMELIFT_FLEET_NAME = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-${env.MODEL_NAME}"
                 }
 
                 // TODO: Send slack notification
@@ -198,6 +199,7 @@ pipeline {
                         stage('Server GameLift Build') {
                             steps {
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
+                                    // TODO: Uncomment for IN PRODUCTION
                                     gameliftBuild()
                                 }
                             }
@@ -253,20 +255,21 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        env._gamelift_build_arn = gameliftDeploy(
-                                            buildName:      "${env.GAMELIFT_BUILD_NAME}", 
-                                            buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
-                                            buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
-                                            serverOS:       "${env.OPERATING_SYSTEM}",
-                                            awsRegion:      "${env.AWS_REGION}"
-                                        )
+                                        // TODO: Uncomment for IN PRODUCTION
+                                        // env.GAMELIFT_BUILD_ARN = gameliftDeploy(
+                                        //     buildName:      "${env.GAMELIFT_BUILD_NAME}", 
+                                        //     buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
+                                        //     buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
+                                        //     serverOS:       "${env.OPERATING_SYSTEM}",
+                                        //     awsRegion:      "${env.AWS_REGION}"
+                                        // )
 
                                         gameliftTagResources(
-                                            resource_arn:   "${env:_gamelift_build_arn}",
+                                            resource_arn:   "${env:GAMELIFT_BUILD_ARN}",
                                             buildTags:      "${env:_TAGS}"
                                         )
 
-                                        echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
+                                        echo "Gamelift Build Arn: ${env.GAMELIFT_BUILD_ARN}"
                                     }
                                 }
                             }
@@ -280,25 +283,26 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        // Setup GameLift variables
                                         env._runtime_config = gameliftRuntimeConfig(
                                             os:      "${env.OPERATING_SYSTEM}",
                                             config:  "${env.SERVER_CONFIG}", 
                                             concExe: "${env.AWS_CONCURRENT_EXECUTIONS}",
                                         )
                                         env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
-                                        env.fleetName = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-$env.MODEL_NAME"
                                         echo "runTimeConfig: ${env.runTimeConfig}"
-                                        echo "fleetName: ${fleetName}"
 
-                                        env.GAMELIFT_FLEET_ARN = gameliftCreateFleet(
-                                            awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                            awsRegion:       "${env.AWS_REGION}",
-                                            buildArn:        "${env._gamelift_build_arn}",
-                                            runTimeConfig:   "${env.runTimeConfig}",
-                                            fleetName:       "${env.fleetName}",
-                                            fleetTags:       "${env._TAGS}"
-                                        )
+                                        // TODO: Remove below for IN PRODUCTION
+                                        env.GAMELIFT_FLEET_ARN = "arn:aws:gamelift:us-east-2:748866342572:fleet/fleet-87b30805-4171-4d01-9956-c6af3b028ec6"
+
+                                        // TODO: Uncomment for IN PRODUCTION
+                                        // env.GAMELIFT_FLEET_ARN = gameliftCreateFleet(
+                                        //     awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                        //     awsRegion:       "${env.AWS_REGION}",
+                                        //     buildArn:        "${env.GAMELIFT_BUILD_ARN}",
+                                        //     runTimeConfig:   "${env.runTimeConfig}",
+                                        //     fleetName:       "${env.GAMELIFT_FLEET_NAME}",
+                                        //     fleetTags:       "${env._TAGS}"
+                                        // )
 
                                         echo "Gamelift Build Arn: ${env.GAMELIFT_FLEET_ARN}"
                                     }
