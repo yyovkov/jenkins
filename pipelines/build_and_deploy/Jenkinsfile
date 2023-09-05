@@ -259,15 +259,15 @@ pipeline {
                                     script {
                                         
                                         // TODO: Change snakecaset to uppercase
-                                        env.GAMLIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
-                                        env.GAMLIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
+                                        env.GAMELIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
+                                        env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
 
-                                        echo "GAMLIFT_BUILD_NAME: ${GAMLIFT_BUILD_NAME}"
-                                        echo "GAMLIFT_BUILD_VERSION: ${GAMLIFT_BUILD_VERSION}"
+                                        echo "GAMELIFT_BUILD_NAME: ${GAMELIFT_BUILD_NAME}"
+                                        echo "GAMELIFT_BUILD_VERSION: ${GAMELIFT_BUILD_VERSION}"
 
                                         env._gamelift_build_arn = gameliftDeploy(
-                                            buildName:      "${env.GAMLIFT_BUILD_NAME}", 
-                                            buildVersion:   "${env.GAMLIFT_BUILD_VERSION}",
+                                            buildName:      "${env.GAMELIFT_BUILD_NAME}", 
+                                            buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
                                             buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
                                             serverOS:       "${env.OPERATING_SYSTEM}",
                                             awsRegion:      "${env.AWS_REGION}"
@@ -330,11 +330,20 @@ pipeline {
                                 )
                             }
                         }
+
+                        stage('Recreate Sessions') {
+                            // TODO: To finish this one
+                            gameliftSessionRecreation(
+                                instaneManagerUrl: "${env.INSTANCE_MANAGER_URL}", 
+                                alias_arn:  "${env.GAMELIFT_ALIAS_ARN}"
+                            )
+                        }
                     }
                 }
+
                 stage('Client GameCast Build and Deploy') {
                     when {
-                        expression {params.ENABLE_CLIENT_GAMECAST == true }
+                        expression { params.ENABLE_CLIENT_GAMECAST == true }
                     }
                     stages {
                         stage('Client GameCast Build') {
@@ -354,7 +363,7 @@ pipeline {
 
                 stage('Client PureWeb Build and Deploy') {
                     when {
-                        expression {params.ENABLE_CLIENT_PUREWEB == true}
+                        expression { params.ENABLE_CLIENT_PUREWEB == true}
                     }
                     stages {
                         stage('Client Pureweb Build') {
