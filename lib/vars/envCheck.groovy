@@ -75,7 +75,7 @@ def call(body) {
     println aliasesArnList
 
     def pesho = []
-    pesho = aliasesArnList.split(' ')
+    pesho = aliasesArnList.split('\n')
     println pesho.getClass()
     println pesho[0]
     println pesho[1]
