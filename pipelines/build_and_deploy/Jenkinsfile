@@ -142,14 +142,14 @@ pipeline {
                 stage('Get GameLift Alias ID') {
                     steps {
                                 withCredentials([aws(
-                                credentialsId: 'aws-gamelift-sand',
+                                credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
                             script {
                                 env.GAMELIFT_ALIAS_ARN = gameliftAliasGetArn(
                                     aws_region: "${params.AWS_REGION}", 
                                     alias_name: "${env.GAMELIFT_ALIAS_NAME}"
-                                    )
+                                )
                             }
                         }
                     }
@@ -227,7 +227,7 @@ pipeline {
                             steps {
                                 script {
                                     withCredentials([aws(
-                                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                                    credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                                     accessKeyVariable: '_AWS_ACCESS_KEY_ID',
                                                     secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
                                         dir("${env:PLASTICSCM_LOCAL_PATH}") {
@@ -252,7 +252,7 @@ pipeline {
                         stage('Upload GameLift Build') {
                             steps {
                                 withCredentials([aws(
-                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
@@ -262,7 +262,7 @@ pipeline {
                                         env.GAMELIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
                                         env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
 
-                                        echo "GAMELIFT_BUILD_NAME: ${GAMELIFT_BUILD_NAME}"
+                                        echo "GAMELIFT_BUILD_NAME:    ${GAMELIFT_BUILD_NAME}"
                                         echo "GAMELIFT_BUILD_VERSION: ${GAMELIFT_BUILD_VERSION}"
 
                                         env._gamelift_build_arn = gameliftDeploy(
@@ -284,10 +284,11 @@ pipeline {
                                 }
                             }
                         }
+
                         stage('GameLift Create Fleet'){
                             steps {
                                 withCredentials([aws(
-                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
@@ -318,6 +319,21 @@ pipeline {
                             }
                         }
 
+                        stage('Create Alias') {
+                            when {
+                                expression { params.CREATE_GAMELIFT_ALIAS == true }
+                            }
+                            steps {
+                                // TODO: Add create lias
+                                env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
+                                    alias_name: "${env.GAMELIFT_ALIAS_NAME}",
+                                    aws_region: "${env.AWS_REGION}",
+                                    fleet_arn:  "${env.GAMELIFT_FLEET_ARN}",
+                                    tags:       "${env._TAGS_BUILD}"
+                                )
+                            }
+                        }
+
                         stage('Update Alias Fleet') {
                             steps {
                                 withCredentials([aws(
@@ -325,9 +341,9 @@ pipeline {
                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
                                     gameliftAliasUpdateFleet(
+                                        alias_id:   "${env.GAMELIFT_ALIAS_ARN}",
                                         aws_region: "${params.AWS_REGION}",
-                                        alias_id: "",
-                                        fleet_id: "${env.GAMELIFT_FLEET_ARN}"
+                                        fleet_id:   "${env.GAMELIFT_FLEET_ARN}"
                                     )
                                 }
                             }
@@ -338,7 +354,7 @@ pipeline {
                                 // TODO: To finish this one
                                 gameliftSessionRecreation(
                                     instaneManagerUrl: "${env.INSTANCE_MANAGER_URL}", 
-                                    alias_arn:  "${env.GAMELIFT_ALIAS_ARN}"
+                                    alias_arn:         "${env.GAMELIFT_ALIAS_ARN}"
                                 )
                             }
                         }

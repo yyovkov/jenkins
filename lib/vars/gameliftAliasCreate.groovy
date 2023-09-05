@@ -1,16 +1,22 @@
 def call(Map conf) {
+    // Name: gameliftAliasCreate.groovy
+    // Description: Create GameLift alias with provided:
+    //    * alias_name
+    //    * aws_region
+    //    * fleet_arn (fleet_id can be passed with the same parameter name)
+    //    * tags
 
-    env.UE5_ALIAS_NAME = 
-    env.UE5_ALIAS_TAGS = 
-    env.UE5_AWS_REGION
-    env.UE5_FLEET_ID = 
+    env.ALIAS_NAME = conf.alias_name
+    env.AWS_REGION = conf.aws_region
+    env.FLEET_ARN  = conf.fleet_arn
+    env.TAGS       = conf.tags
 
     powershell '''
-        $cmdAliasCreate = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
+        $cmdAliasCreate = "& aws --region `"${env:AWS_REGION}`"" + `
             " gamelift create-alias" + `
             " --name `"${env:ALIAS_NAME}`"" + `
             " --routing-strategy Type=SIMPLE,FleetId=`"${env:FLEET_ID}`"" + `
-            " --tags `"${env:UE5_ALIAS_TAGS}`""
+            " --tags `"${env:TAGS}`""
 
         Write-Host Create Alias command: $cmdAliasCreate
 
