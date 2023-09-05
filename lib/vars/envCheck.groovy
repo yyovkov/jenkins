@@ -15,7 +15,7 @@ def call(body) {
             " gamelift list-aliases" + `
             " | ConvertFrom-Json"
 
-        $jsonObj = Invoke-Expression $cmdAliasesList
+        $jsonObj = Invoke-Expression $cmcAliasesList
 
         $aliasesList = "($jsonObj" + `
             " | Select-Object -ExpandProperty Aliases " + `
