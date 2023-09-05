@@ -17,7 +17,7 @@ pipeline {
         booleanParam(name: 'BUILD_LINUX_SERVER', defaultValue: true, description: 'Use Linux for server')
         booleanParam(name: 'ENABLE_CLIENT_GAMECAST', defaultValue: false, description: 'Build and deploy GameCast client')
         booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: false, description: 'Build and deploy PureWeb client')
-        booleanParam(name: 'CREATE_GAMLIFT_ALIAS', defaultValue; false, description: 'Create GameLift Alias if not exist')
+        booleanParam(name: 'CREATE_GAMLIFT_ALIAS', defaultValue: false, description: 'Create GameLift Alias if not exist')
         // 
         choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.large', 'c5.xlarge', 'c5.2xlarge'])
         choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
