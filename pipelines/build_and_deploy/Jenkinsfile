@@ -106,14 +106,16 @@ pipeline {
                 }
                 stage('Get GameLift Alias ID') {
                     steps {
-                            withCredentials([aws(
-                            credentialsId: 'aws-gamelift-sand',
-                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                            secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
-                        env.GAMELIFT_ALIAS_ARN = gameliftAliasGetArn(
-                            aws_region: "${params.AWS_REGION}", 
-                            alias_name: "${env.GAMELIFT_ALIAS_NAME}"
-                            )
+                                withCredentials([aws(
+                                credentialsId: 'aws-gamelift-sand',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+                            script {
+                                env.GAMELIFT_ALIAS_ARN = gameliftAliasGetArn(
+                                    aws_region: "${params.AWS_REGION}", 
+                                    alias_name: "${env.GAMELIFT_ALIAS_NAME}"
+                                    )
+                            }
                         }
                     }
                 }
