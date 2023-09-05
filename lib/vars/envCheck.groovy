@@ -72,7 +72,7 @@ def call(body) {
 
     def aliasesArnList = aliasesArn.split('\n')
     if (aliasesArnList.length != 1) {
-        println "There are aliasesArnList.length aliases with name ..."
+        println "There are " + aliasesArnList.length + " aliases with name ..."
     }
 
     currentBuild.result = 'ABORTED'
