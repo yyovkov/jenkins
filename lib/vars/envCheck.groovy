@@ -30,5 +30,8 @@ def call(body) {
     ''')
 
     println aliasesArnList.getClass()
+    println aliasesArnList
+
     currentBuild.result = 'ABORTED'
+    error("This is just a test and very expected")
 }
