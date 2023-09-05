@@ -200,7 +200,7 @@ pipeline {
                             steps {
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     // TODO: Uncomment for IN PRODUCTION
-                                    gameliftBuild()
+                                    // gameliftBuild()
                                 }
                             }
                         }
