@@ -34,9 +34,7 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
-    // def aliasesArnList = aliasesArn.split('\n')
-
-    def aliasesArnList = []
+    def aliasesArnList = aliasesArn.split('\n')
 
     def error_message = "There are " + aliasesArnList.size() + 
         " GameLift aliases with name \"" + params.CUSTOMER + 
@@ -51,7 +49,4 @@ def call(body) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
-
-    currentBuild.result = 'SUCCESS'
-    error("This is the final fo the test")
 }
