@@ -70,11 +70,15 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
-    def aliasesArnList = aliasesArn.split('\n')
-    if (aliasesArnList.length != 1) {
-        println "There are " + aliasesArnList.length + " aliases with name ..."
+    // def aliasesArnList = aliasesArn.split('\n')
+    def aliasesArnList = []
+    if (aliasesArnList.length < 1) {
+        def error_message = "There are " + asesArnList.length + 
+            " GameLift  aliases with name" + params.CUSTOMER + 
+            " while exactly 1 expected"
+        currentBuild.result = 'ABORTED'
+        error(error_message)
     }
 
-    currentBuild.result = 'ABORTED'
     error("This is just a test and very expected")
 }
