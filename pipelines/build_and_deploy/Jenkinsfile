@@ -59,8 +59,35 @@ pipeline {
     stages {
         stage("Prerun") {
             steps {
+                // Setup Environmental Variables
+                script {
+                    switch(params.TARGET_CONNECTION) {
+                        case 'CC_Prod':
+                            env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
+                            env.FLEETNAMEPART = "Prod"
+                            break
+                        case 'CC_Dev':
+                            env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
+                            env.FLEETNAMEPART = "Dev"
+                            break
+                        case 'CC_Sales':
+                            env.SENTRY_URL = "https://3e959cc9acd8d5e4a997e31340ae4107@o993426.ingest.sentry.io/4505664040927232"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
+                            env.FLEETNAMEPART = "Sales"
+                            break
+                        default:
+                            env.SENTRY_URL = "not_setup"
+                            env.FLEETNAMEPART = "Sand"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
+                            break
+                    }
+                }
+
                 // Send slack notification
                 echo "TODO: Sending slack notification"
+
                 // Check environmenal variables
                 withCredentials([aws(
                         credentialsId: 'aws-gamelift-sand',
@@ -68,6 +95,7 @@ pipeline {
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
                     gameliftEnvCheck()
                 }
+
             }
         }
 
@@ -101,6 +129,15 @@ pipeline {
                             env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
                             env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
                             env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+
+                            switch(params.CHANGESET_TYPE) {
+                                case 'latest-stable':
+                                    // TODO: Check if something should take place here.
+                                    bat "dir"
+                                    break
+                                default:
+                                    break
+                            }
                         }
                     }
                 }
@@ -125,36 +162,7 @@ pipeline {
         stage('Setup dynamic environment') {
             steps {
                 script {
-                    switch(params.TARGET_CONNECTION) {
-                        case 'CC_Prod':
-                            env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
-                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-prod"
-                            env.FLEETNAMEPART = "Prod"
-                            break
-                        case 'CC_Dev':
-                            env.SENTRY_URL = "https://daeb6c5130c6475abd4eb91857c3352e@o993426.ingest.sentry.io/4505125043503104"
-                            env.AWS_DEPLOY_CREDENTIALS = "aws-jenkins-dev"
-                            env.FLEETNAMEPART = "Dev"
-                            break
-                        case 'CC_Sales':
-                            env.SENTRY_URL = "https://3e959cc9acd8d5e4a997e31340ae4107@o993426.ingest.sentry.io/4505664040927232"
-                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
-                            env.FLEETNAMEPART = "Sales"
-                            break
-                        default:
-                            env.SENTRY_URL = "not_setup"
-                            env.FLEETNAMEPART = "Sand"
-                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
-                            break
-                    }
-                    switch(params.CHANGESET_TYPE) {
-                        case 'latest-stable':
-                            // execute code to define latest stable
-                            bat "dir"
-                            break
-                        default:
-                            break
-                    }
+                    
                      
                     // Current build vairables
                     env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId
@@ -366,15 +374,18 @@ pipeline {
     }
     post {
         always {
-            echo "Pipeline Finished."
+            echo "Pipeline finished."
         }
         
+        abort {
+            echo "Pipeline aborted."
+        }
         success {
-            echo "Finished successfully."
+            echo "Pipeline succeeded."
         }
 
         failure {
-            echo "Failed."
+            echo "Pipeline failed."
         }
     }
 }
