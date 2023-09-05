@@ -54,7 +54,7 @@ pipeline {
     }
 
     stages {
-        stage("Prerun tasks and checks") {
+        stage("Prerun") {
             steps {
                 // Send slack notification
                 echo "TODO: Sending slack notification"
