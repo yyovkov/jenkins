@@ -1,4 +1,10 @@
 def call(body) {
+    // Name: gameliftEnvCheck.groovy
+    // Checks reqquirements for running pipeline for building and deploying
+    // GameLift for Mytaverse
+    //
+    // Checking if all required parameters are provided
+    // Checks if there is only one alias that should be deployed to
 
     env.UE5_ALIAS_NAME = params.CUSTOMER
     env.UE5_AWS_REGION = params.AWS_REGION
@@ -70,8 +76,8 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
-    // def aliasesArnList = aliasesArn.split('\n')
-    def aliasesArnList = []
+    def aliasesArnList = aliasesArn.split('\n')
+
     if (aliasesArnList.size() != 1) {
         def error_message = "There are " + aliasesArnList.size() + 
             " GameLift aliases with name \"" + params.CUSTOMER + 
