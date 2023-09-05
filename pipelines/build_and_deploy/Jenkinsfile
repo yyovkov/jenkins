@@ -250,8 +250,8 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        env.GAMELIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
                                         env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
+                                        env.GAMELIFT_BUILD_NAME = "${env.CUSTOMER}-${env.FLEETNAMEPART}-${env.GAMELIFT_BUILD_VERSION}"
                                         env._gamelift_build_arn = gameliftDeploy(
                                             buildName:      "${env.GAMELIFT_BUILD_NAME}", 
                                             buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
