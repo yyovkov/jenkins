@@ -17,6 +17,7 @@ pipeline {
         booleanParam(name: 'BUILD_LINUX_SERVER', defaultValue: true, description: 'Use Linux for server')
         booleanParam(name: 'ENABLE_CLIENT_GAMECAST', defaultValue: false, description: 'Build and deploy GameCast client')
         booleanParam(name: 'ENABLE_CLIENT_PUREWEB', defaultValue: false, description: 'Build and deploy PureWeb client')
+        booleanParam(name: 'CREATE_GAMLIFT_ALIAS', default; false, description: 'Create GameLift Alias if not exist')
         // 
         choice(name: 'AWS_INSTANCE_TYPE', choices: ['c5.large', 'c5.xlarge', 'c5.2xlarge'])
         choice(name: 'PLASTICSCM_CLEANUP_STRATEGY', choices: ['STANDARD', 'MINIMAL', 'FULL', 'DELETE'])
@@ -40,6 +41,7 @@ pipeline {
     environment {
         GIT_CREDENTIALS_ID = 'gh-deploy-key'
         CRED_CICD = credentials('cicd_server')
+        GAMELIFT_ALIAS_NAME = "${params.CUSTOMER}"
         LINUX_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/LinuxServer"
         OPERATING_SYSTEM = "${params.BUILD_LINUX_SERVER ? "AMAZON_LINUX_2" : "WINDOWS_2012"}" // was: GAMELIFT_SERVER_OS 
         PACKAGE_NUMBER = "${env.BUILD_NUMBER}"
@@ -70,33 +72,50 @@ pipeline {
         }
 
         stage('Checkout PlasticSCM'){
-            steps {
-                // TODO: Define ChangeSet
-                // Consider whether the step should be here or as part of the
-                // PlasticSCM library
-                echo "TODO: Resolve the latest-stable mess made by .net"
-                echo "Defining Changeset Number"
-                echo "File: ue5-pipelines/parallel/Jenkinsfile"
-                echo "Pipeline name: DevGit "
-                echo "Invoke pipeline: 'GetLatestStable'"
+            parallel {
+                stage('Checkou PlasticSCM') {
+                    steps {
+                        // TODO: Define ChangeSet
+                        // Consider whether the step should be here or as part of the
+                        // PlasticSCM library
+                        echo "TODO: Resolve the latest-stable mess made by .net"
+                        echo "Defining Changeset Number"
+                        echo "File: ue5-pipelines/parallel/Jenkinsfile"
+                        echo "Pipeline name: DevGit "
+                        echo "Invoke pipeline: 'GetLatestStable'"
 
-                script {
-                    plasticVars = cm(
-                        branch:         "${params:PLASTICSCM_BRANCH}",
-                        changeset:      "${env:PLASTICSCM_CHANGESET}",
-                        cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
-                        changelog:      true,
-                        credentialsId:  "${env.GIT_CREDENTIALS_ID}",
-                        poll:           false,
-                        repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
-                        server:         "${env.PLASTICSCM_TARGET_SERVER}",
-                        workingMode:    "LDAP",
-                        directory:      "${env.PLASTICSCM_LOCAL_PATH}"
-                    )
+                        script {
+                            plasticVars = cm(
+                                branch:         "${params:PLASTICSCM_BRANCH}",
+                                changeset:      "${env:PLASTICSCM_CHANGESET}",
+                                cleanup:        "${env:PLASTICSCM_CLEANUP_STRATEGY}",
+                                changelog:      true,
+                                credentialsId:  "${env.GIT_CREDENTIALS_ID}",
+                                poll:           false,
+                                repository:     "${env.PLASTICSCM_TARGET_REPOSITORY}",
+                                server:         "${env.PLASTICSCM_TARGET_SERVER}",
+                                workingMode:    "LDAP",
+                                directory:      "${env.PLASTICSCM_LOCAL_PATH}"
+                            )
 
-                    env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
-                    env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
-                    env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+                            env.PLASTICSCM_AUTHOR           = plasticVars["PLASTICSCM_AUTHOR"]
+                            env.PLASTICSCM_CHANGESET_ID     = plasticVars["PLASTICSCM_CHANGESET_ID"]
+                            env.PLASTICSCM_CHANGESET_GUID   = plasticVars["PLASTICSCM_CHANGESET_GUID"]
+                        }
+                    }
+                }
+                stage('Get GameLift Alias ID') {
+                    steps {
+                            withCredentials([aws(
+                            credentialsId: 'aws-gamelift-sand',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+                        env.GAMELIFT_ALIAS_ARN = gameliftAliasGetArn(
+                            aws_region: "${params.AWS_REGION}", 
+                            alias_name: "${env.GAMELIFT_ALIAS_NAME}"
+                            )
+                        }
+                    }
                 }
             }
         }

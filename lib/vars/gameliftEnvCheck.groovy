@@ -6,7 +6,7 @@ def call(body) {
     // Checking if all required parameters are provided
     // Checks if there is only one alias that should be attached to
 
-    env.UE5_ALIAS_NAME = params.CUSTOMER
+    env.UE5_ALIAS_NAME = env.GAMELIFT_ALIAS_NAME
     env.UE5_AWS_REGION = params.AWS_REGION
 
 
@@ -36,11 +36,20 @@ def call(body) {
 
     def aliasesArnList = aliasesArn.split('\n')
 
-    if (aliasesArnList.size() != 1) {
-        def error_message = "There are " + aliasesArnList.size() + 
-            " GameLift aliases with name \"" + params.CUSTOMER + 
-            "\" while exactly 1 expected"
+    def error_message = "There are " + aliasesArnList.size() + 
+        " GameLift aliases with name \"" + params.CUSTOMER + 
+        "\" while exactly 1 expected"
+    
+    if ((aliasesArnList.size() < 1) && (! params.CREATE_GAMLIFT_ALIAS)) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
+
+    if (aliasesArnList.size() > 1) {
+        currentBuild.result = 'ABORTED'
+        error(error_message)
+    }
+
+    currentBuild.result = 'SUCCESS'
+    error("This is the final fo the test)
 }
