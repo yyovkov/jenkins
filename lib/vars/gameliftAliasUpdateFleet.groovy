@@ -10,7 +10,7 @@ def call(Map conf) {
         $cmdAliasUpdate = "& aws --region ${env:AWS_REGION}" + `
             " gamelift update-alias" + `
             " --alias-id `"${env:ALIAS_ID}`"" + `
-            " --routing-stragegy=Type=SIMNPLE,FleetIid=${FLEET_ID}"
+            " --routing-strategy Type=SIMNPLE,FleetIid=${FLEET_ID}"
 
         Write-Host Alias Update Command: $cmdAliasUpdate
 
