@@ -72,7 +72,7 @@ def call(body) {
 
     // def aliasesArnList = aliasesArn.split('\n')
     def aliasesArnList = []
-    if (aliasesArnList.size < 1) {
+    if (aliasesArnList.size() < 1) {
         def error_message = "There are " + asesArnList.length + 
             " GameLift  aliases with name" + params.CUSTOMER + 
             " while exactly 1 expected"
