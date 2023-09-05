@@ -324,7 +324,6 @@ pipeline {
                                 expression { params.CREATE_GAMELIFT_ALIAS == true }
                             }
                             steps {
-                                // TODO: Add create lias
                                 script {
                                     env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
                                         alias_name: "${env.GAMELIFT_ALIAS_NAME}",
