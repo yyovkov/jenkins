@@ -376,8 +376,7 @@ pipeline {
         always {
             echo "Pipeline finished."
         }
-        
-        abort {
+        aborted {
             echo "Pipeline aborted."
         }
         success {
