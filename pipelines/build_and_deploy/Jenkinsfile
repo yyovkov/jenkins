@@ -50,18 +50,20 @@ pipeline {
         SERVER_BUILD_ROOT = "${env.PACKAGE_PATH}/${env.PACKAGE_NUMBER}/WindowsServer"
         UAT_PATH = "${UE_ENGINE}" + "/Engine/Build/BatchFiles/RunUAT.bat"
 
-        buildFolder = "${params.BUILD_LINUX_SERVER ? "${env.LINUX_BUILD_ROOT}" : "${env.SERVER_BUILD_ROOT}"}"
+        GAMELIF_BUILD_FOLDER = "${params.BUILD_LINUX_SERVER ? "${env.LINUX_BUILD_ROOT}" : "${env.SERVER_BUILD_ROOT}"}"
     }
 
     stages {
         stage("Send slack notification") {
             steps {
-                echo "Sending slack notification"
             }
         }
 
-        stage("Start Conditions") {
+        stage("Prerun checks") {
             steps {
+                // Send slack notification
+                echo "TODO: Sending slack notification"
+                // Check environmenal variables
                 envCheck()
             }
         }
@@ -241,7 +243,7 @@ pipeline {
                                         env._gamelift_build_arn = gameliftDeploy(
                                             buildName:      "${env.GAMLIFT_BUILD_NAME}", 
                                             buildVersion:   "${env.GAMLIFT_BUILD_VERSION}",
-                                            buildFolder:    "${env.buildFolder}",
+                                            buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
                                             serverOS:       "${env.OPERATING_SYSTEM}",
                                             awsRegion:      "${env.AWS_REGION}"
                                         )
