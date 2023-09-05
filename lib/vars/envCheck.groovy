@@ -70,7 +70,7 @@ def call(body) {
         Write-Output $aliasesArnList.
     ''')
 
-    def aliasesArnList = aliasesArnList.split('\n')
+    def aliasesArnList = aliasesArn.split('\n')
     println aliasesArnList.getClass()
     println aliasesArnList.size
     println aliasesArnList
