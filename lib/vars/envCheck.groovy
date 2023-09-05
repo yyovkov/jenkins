@@ -67,12 +67,11 @@ def call(body) {
             | Where-Object { $_.Name -eq "${env:UE5_ALIAS_NAME}" }).AliasArn
 
 
-        Write-Output $aliasesArnList.
+        Write-Output $aliasesArnList
     ''')
 
     def aliasesArnList = aliasesArn.split('\n')
     println aliasesArnList.getClass()
-    println aliasesArnList.size()
     println aliasesArnList.length
     println aliasesArnList
 
