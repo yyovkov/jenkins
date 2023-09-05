@@ -71,9 +71,9 @@ def call(body) {
     ''')
 
     def aliasesArnList = aliasesArn.split('\n')
-    println aliasesArnList.getClass()
-    println aliasesArnList.length
-    println aliasesArnList
+    if (aliasesArnList.length != 1) {
+        println "There are aliasesArnList.length aliases with name ..."
+    }
 
     currentBuild.result = 'ABORTED'
     error("This is just a test and very expected")
