@@ -51,5 +51,5 @@ def call(body) {
     }
 
     currentBuild.result = 'SUCCESS'
-    error("This is the final fo the test)
+    error("This is the final fo the test")
 }
