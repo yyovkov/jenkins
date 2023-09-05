@@ -22,11 +22,11 @@ def call(body) {
 
         $jsonObj = Invoke-Expression $cmcAliasesList
 
-        $cmdGetAliasesArns = "($jsonObj" + `
+        $cmdGetAliasesArns = "& ($jsonObj" + `
             " | Select-Object -ExpandProperty Aliases " + `
             " | Where-Object { $_.Name -eq `"${env:UE5_ALIAS_NAME}`" }).AliasArn"
 
-        Write-Output Command to get Liases Arns: $cmdGetAliasesArns
+        Write-Host Command to get Liases Arns: $cmdGetAliasesArns
         $aliasesArnList = Invoke-Expression $cmdGetAliasesArns
 
         Write-Output $aliasesArnList
