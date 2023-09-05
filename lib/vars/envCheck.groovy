@@ -74,8 +74,8 @@ def call(body) {
     def aliasesArnList = []
     if (aliasesArnList.size() < 1) {
         def error_message = "There are " + aliasesArnList.size() + 
-            " GameLift  aliases with name" + params.CUSTOMER + 
-            " while exactly 1 expected"
+            " GameLift aliases with name \"" + params.CUSTOMER + 
+            "\" while exactly 1 expected"
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
