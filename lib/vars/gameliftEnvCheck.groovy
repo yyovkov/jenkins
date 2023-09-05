@@ -34,7 +34,9 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
-    def aliasesArnList = aliasesArn.split('\n')
+    // def aliasesArnList = aliasesArn.split('\n')
+
+    def aliasesArnList = []
 
     def error_message = "There are " + aliasesArnList.size() + 
         " GameLift aliases with name \"" + params.CUSTOMER + 
