@@ -4,7 +4,7 @@ def call(body) {
     // GameLift for Mytaverse
     //
     // Checking if all required parameters are provided
-    // Checks if there is only one alias that should be deployed to
+    // Checks if there is only one alias that should be attached to
 
     env.UE5_ALIAS_NAME = params.CUSTOMER
     env.UE5_AWS_REGION = params.AWS_REGION
