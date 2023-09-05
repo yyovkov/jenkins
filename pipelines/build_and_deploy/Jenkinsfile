@@ -60,9 +60,9 @@ pipeline {
                 echo "TODO: Sending slack notification"
                 // Check environmenal variables
                 withCredentials([aws(
-                                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
-                                                    accessKeyVariable: '_AWS_ACCESS_KEY_ID',
-                                                    secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
+                        credentialsId: 'aws-gamelift-sand',
+                        accessKeyVariable: '_AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
                     envCheck()
                 }
             }
