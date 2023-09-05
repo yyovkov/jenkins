@@ -325,12 +325,14 @@ pipeline {
                             }
                             steps {
                                 // TODO: Add create lias
-                                env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
-                                    alias_name: "${env.GAMELIFT_ALIAS_NAME}",
-                                    aws_region: "${env.AWS_REGION}",
-                                    fleet_arn:  "${env.GAMELIFT_FLEET_ARN}",
-                                    tags:       "${env._TAGS_BUILD}"
-                                )
+                                script {
+                                    env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
+                                        alias_name: "${env.GAMELIFT_ALIAS_NAME}",
+                                        aws_region: "${env.AWS_REGION}",
+                                        fleet_arn:  "${env.GAMELIFT_FLEET_ARN}",
+                                        tags:       "${env._TAGS_BUILD}"
+                                    )
+                                }
                             }
                         }
 
