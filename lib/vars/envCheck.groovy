@@ -22,8 +22,8 @@ def call(body) {
             " | Where-Object { $_.Name -eq `"${env.ALIAS_NAME}`" }).AliasArn"
 
         Write-Output $aliasesList
-    '''
+    ''')
 
-    // println aliasesArnList.getClass()
+    println aliasesArnList.getClass()
     currentBuild.result = 'ABORTED'
 }
