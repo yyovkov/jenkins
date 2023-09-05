@@ -77,8 +77,10 @@ def call(body) {
     def pesho = []
     pesho = aliasesArnList.split(' ')
     println pesho.getClass()
-    println pesho
-
+    println pesho[0]
+    println pesho[1]
+    println pesho[2]
+    println "List leng: "
 
     currentBuild.result = 'ABORTED'
     error("This is just a test and very expected")
