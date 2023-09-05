@@ -60,7 +60,7 @@ pipeline {
             }
         }
 
-        stager("Start Conditions") {
+        stage("Start Conditions") {
             steps {
                 envCheck()
             }
