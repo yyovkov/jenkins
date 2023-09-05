@@ -15,7 +15,8 @@ def call(body) {
     }
 
     // TODO: Check if Alias exists
-    def aliasesArnList = powershell(returnStdout: true, script: '''
+    def aliasesArnList = []
+    aliasesArnList = powershell(returnStdout: true, script: '''
         # $cmcAliasesList = "& aws --region ${env:UE5_AWS_REGION}" + `
         #    " gamelift list-aliases" + `
         #    " | ConvertFrom-Json"
@@ -67,7 +68,7 @@ def call(body) {
             | Where-Object { $_.Name -eq "${env:UE5_ALIAS_NAME}" }).AliasArn
 
 
-        Write-Output $aliasesArnList
+        Write-Output $aliasesArnList.
     ''')
 
     println aliasesArnList.getClass()
