@@ -256,7 +256,7 @@ pipeline {
 
                                     script {
                                         // TODO: Remove for IN PRODUCTION
-                                        env:GAMELIFT_BUILD_ARN = "arn:aws:gamelift:us-east-2:748866342572:build/build-d5da9806-ed5e-4977-ae1e-b857c01f248c"
+                                        env.GAMELIFT_BUILD_ARN = "arn:aws:gamelift:us-east-2:748866342572:build/build-d5da9806-ed5e-4977-ae1e-b857c01f248c"
 
                                         // TODO: Uncomment for IN PRODUCTION
                                         // env.GAMELIFT_BUILD_ARN = gameliftDeploy(
