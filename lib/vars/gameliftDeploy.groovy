@@ -1,5 +1,5 @@
 def call(Map conf) {
-    echo "GameLift Server Deploying"
+    // Deploy GameLift Build to AWS, uing `aws gamelift upload-build`
 
     env.UE5_BUILD_NAME      = conf.buildName.trim()
     env.UE5_BUILD_VERSION   = conf.buildVersion.trim()
