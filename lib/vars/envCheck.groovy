@@ -72,7 +72,8 @@ def call(body) {
 
     def aliasesArnList = aliasesArn.split('\n')
     println aliasesArnList.getClass()
-    println aliasesArnList.size
+    println aliasesArnList.size()
+    println aliasesArnList.length
     println aliasesArnList
 
     currentBuild.result = 'ABORTED'
