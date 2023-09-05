@@ -20,7 +20,6 @@ def call(body) {
         error("Parameter OWNER must be set")
     }
 
-    // TODO: Check if Alias exists
     def aliasesArn = powershell(returnStdout: true, script: '''
         $cmcAliasesList = "& aws --region ${env:UE5_AWS_REGION}" + `
            " gamelift list-aliases" + `
