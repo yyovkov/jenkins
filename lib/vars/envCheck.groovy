@@ -24,6 +24,6 @@ def call(body) {
         Write-Output $aliasesList
     '''
 
-    println aliasesArnList.getClass()
+    // println aliasesArnList.getClass()
     currentBuild.result = 'ABORTED'
 }
