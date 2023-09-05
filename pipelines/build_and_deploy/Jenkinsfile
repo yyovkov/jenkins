@@ -62,8 +62,8 @@ pipeline {
                 // Check environmenal variables
                 withCredentials([aws(
                         credentialsId: 'aws-gamelift-sand',
-                        accessKeyVariable: '_AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
                     envCheck()
                 }
             }
