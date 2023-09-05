@@ -92,7 +92,7 @@ pipeline {
                     }
                 }
 
-                // Send slack notification
+                // TODO: Send slack notification
                 echo "TODO: Sending slack notification"
 
                 // Check environmenal variables
@@ -194,13 +194,6 @@ pipeline {
                     stages {
                         stage('Server GameLift Build') {
                             steps {
-                                echo "Server GameLift Build"
-                                echo "Currently invoke external Pipeline - 'GameLift'"
-                                echo "TODO: Should setup: serverPlasticChangeSet"
-                                // New  Code
-                                echo "Server GameLift Build"
-                                echo "OPERATING_SYSTEM: ${env.OPERATING_SYSTEM}"
-                                echo "PLATFORM: ${env.PLATFORM}"
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
                                     gameliftBuild()
                                 }
@@ -257,14 +250,8 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        
-                                        // TODO: Change snakecaset to uppercase
                                         env.GAMELIFT_BUILD_NAME = "Build-${env.FLEETNAMEPART}"
                                         env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
-
-                                        echo "GAMELIFT_BUILD_NAME:    ${GAMELIFT_BUILD_NAME}"
-                                        echo "GAMELIFT_BUILD_VERSION: ${GAMELIFT_BUILD_VERSION}"
-
                                         env._gamelift_build_arn = gameliftDeploy(
                                             buildName:      "${env.GAMELIFT_BUILD_NAME}", 
                                             buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
@@ -279,7 +266,6 @@ pipeline {
                                         )
 
                                         echo "Gamelift Build Arn: ${env._gamelift_build_arn}"
-
                                     }
                                 }
                             }
