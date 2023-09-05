@@ -318,25 +318,29 @@ pipeline {
                             }
                         }
 
-                        stage('Update Alias Fleet'){
-                            withCredentials([aws(
-                                    credentialsId: env.AWS_DEPLOY_CREDENTIALS,
-                                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                    secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
-                                gameliftAliasUpdateFleet(
-                                    aws_region: "${params.AWS_REGION}",
-                                    alias_id: "",
-                                    fleet_id: "${env.GAMELIFT_FLEET_ARN}"
-                                )
+                        stage('Update Alias Fleet') {
+                            steps {
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+                                    gameliftAliasUpdateFleet(
+                                        aws_region: "${params.AWS_REGION}",
+                                        alias_id: "",
+                                        fleet_id: "${env.GAMELIFT_FLEET_ARN}"
+                                    )
+                                }
                             }
                         }
 
                         stage('Recreate Sessions') {
-                            // TODO: To finish this one
-                            gameliftSessionRecreation(
-                                instaneManagerUrl: "${env.INSTANCE_MANAGER_URL}", 
-                                alias_arn:  "${env.GAMELIFT_ALIAS_ARN}"
-                            )
+                            steps {
+                                // TODO: To finish this one
+                                gameliftSessionRecreation(
+                                    instaneManagerUrl: "${env.INSTANCE_MANAGER_URL}", 
+                                    alias_arn:  "${env.GAMELIFT_ALIAS_ARN}"
+                                )
+                            }
                         }
                     }
                 }
