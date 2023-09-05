@@ -6,11 +6,11 @@ def call(Map conf) {
     env.UE5_ALIAS_NAME    = conf.alias_name
 
     def aliasesArn = powershell(returnStdout: true, script: '''
-        $cmcAliasesList = "& aws --region ${env:UE5_AWS_REGION}" + `
+        $cmdAliasesList = "& aws --region ${env:UE5_AWS_REGION}" + `
            " gamelift list-aliases" + `
            " | ConvertFrom-Json"
         
-        $jsonObj = Invoke-Expression $cmcAliasesList
+        $jsonObj = Invoke-Expression $cmdAliasesList
 
         $aliasesArnList = ($jsonObj `
         | Select-Object -ExpandProperty Aliases `
@@ -29,5 +29,5 @@ def call(Map conf) {
         error(error_message)
     }
 
-    return aliasesArnList[0]
+    return aliasesArnList[0].trim()
 }
