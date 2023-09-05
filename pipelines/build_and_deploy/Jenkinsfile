@@ -61,6 +61,9 @@ pipeline {
             steps {
                 // Setup Environmental Variables
                 script {
+                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId
+                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
+
                     switch(params.TARGET_CONNECTION) {
                         case 'CC_Prod':
                             env.SENTRY_URL = "https://fa82a796bfbe4f699d63480130b8ed4a@o993426.ingest.sentry.io/4504445385244672"
@@ -103,15 +106,6 @@ pipeline {
             parallel {
                 stage('Checkou PlasticSCM') {
                     steps {
-                        // TODO: Define ChangeSet
-                        // Consider whether the step should be here or as part of the
-                        // PlasticSCM library
-                        echo "TODO: Resolve the latest-stable mess made by .net"
-                        echo "Defining Changeset Number"
-                        echo "File: ue5-pipelines/parallel/Jenkinsfile"
-                        echo "Pipeline name: DevGit "
-                        echo "Invoke pipeline: 'GetLatestStable'"
-
                         script {
                             plasticVars = cm(
                                 branch:         "${params:PLASTICSCM_BRANCH}",
@@ -163,10 +157,6 @@ pipeline {
             steps {
                 script {
                     
-                     
-                    // Current build vairables
-                    env.BUILD_TRIGGERED_BY_ID = currentBuild.getBuildCauses()[0].userId
-                    env.BUILD_TRIGGERED_BY_NAME = currentBuild.getBuildCauses()[0].userName
 
                     // Setup default resource tags
                     env._TAGS_BUILD = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
