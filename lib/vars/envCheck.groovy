@@ -1,4 +1,9 @@
 def call(body) {
+
+    env.UE5_ALIAS_NAME = params.CUSTOMER
+    env.UE5_AWS_REGION = params.AWS_REGION
+
+
     if (params.CUSTOMER == "") {
         currentBuild.result = 'ABORTED'
         error("Parameter CUSTOMER must be set")
@@ -19,7 +24,7 @@ def call(body) {
 
         $aliasesList = "($jsonObj" + `
             " | Select-Object -ExpandProperty Aliases " + `
-            " | Where-Object { $_.Name -eq `"${env.ALIAS_NAME}`" }).AliasArn"
+            " | Where-Object { $_.Name -eq `"${env:UE5_ALIAS_NAME}`" }).AliasArn"
 
         Write-Output $aliasesList
     ''')
