@@ -228,7 +228,7 @@ pipeline {
                                                     credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                                     accessKeyVariable: '_AWS_ACCESS_KEY_ID',
                                                     secretKeyVariable: "_AWS_SECRET_ACCESS_KEY")]) {
-                                        dir("${env:PLASTICSCM_LOCAL_PATH}") {
+                                        dir("${env.PLASTICSCM_LOCAL_PATH}") {
                                             powershell '''
                                                 $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
                                                     | Join-Path -ChildPath aws `
@@ -239,7 +239,7 @@ pipeline {
                                                     " ${env:AWS_REGION}"
 
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
-                                                # TODO: Uncomment for production
+                                                # TODO: Uncomment for IN PRODUCTION
                                                 # Invoke-Expression $cmdFleetCm
                                             '''
                                         }
@@ -255,6 +255,9 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
+                                        // TODO: Remove for IN PRODUCTION
+                                        env:GAMELIFT_BUILD_ARN = "arn:aws:gamelift:us-east-2:748866342572:build/build-d5da9806-ed5e-4977-ae1e-b857c01f248c"
+
                                         // TODO: Uncomment for IN PRODUCTION
                                         // env.GAMELIFT_BUILD_ARN = gameliftDeploy(
                                         //     buildName:      "${env.GAMELIFT_BUILD_NAME}", 
@@ -265,8 +268,8 @@ pipeline {
                                         // )
 
                                         gameliftTagResources(
-                                            resource_arn:   "${env:GAMELIFT_BUILD_ARN}",
-                                            buildTags:      "${env:_TAGS}"
+                                            resource_arn:   "${env.GAMELIFT_BUILD_ARN}",
+                                            buildTags:      "${env._TAGS}"
                                         )
 
                                         echo "Gamelift Build Arn: ${env.GAMELIFT_BUILD_ARN}"
