@@ -77,6 +77,7 @@ def call(body) {
     def pesho = []
     pesho = aliasesArnList.split(' ')
     println pesho.getClass()
+    println pesho
 
 
     currentBuild.result = 'ABORTED'
