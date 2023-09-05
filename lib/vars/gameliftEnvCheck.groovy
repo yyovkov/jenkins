@@ -44,6 +44,4 @@ def call(body) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
-
-    error("This is just a test and very expected")
 }
