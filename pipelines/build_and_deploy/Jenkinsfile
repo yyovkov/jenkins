@@ -25,7 +25,8 @@ pipeline {
         // 
         string(name: 'AWS_CONCURRENT_EXECUTIONS', defaultValue: '4')
         string(name: 'AWS_REGION', defaultValue: 'us-east-2', description: 'AWS Region to which the build will be deployed')
-        string(name: 'CUSTOMER', defaultValue: '', description: 'Customer related to this Build')
+        // TODO: Set CUSTOMER value to ''
+        string(name: 'CUSTOMER', defaultValue: 'NoSuchCustomer', description: 'Customer related to this Build')
         string(name: 'PACKAGE_PATH', defaultValue: 'D:/jenkins_yovko/artifacts/Mytaverse/Server', description: 'Artifact storage root directory.')
         string(name: 'MODEL_NAME', defaultValue: 'Mytaverse51Dev', description: 'Viktor to add description for this variable')
         string(name: 'MAPS_CONFIG_NAME', defaultValue: '51Devtest', description: 'Viktor to add description for this variable')
@@ -121,7 +122,8 @@ pipeline {
                             break
                         default:
                             env.SENTRY_URL = "not_setup"
-                            env.FLEETNAMEPART = "Prod"
+                            env.FLEETNAMEPART = "Sand"
+                            env.AWS_DEPLOY_CREDENTIALS = "aws-gamelift-sand"
                             break
                     }
                     switch(params.CHANGESET_TYPE) {
