@@ -72,11 +72,12 @@ def call(body) {
     ''')
 
     println aliasesArnList.getClass()
+    println aliasesArnList
 
     def pesho = []
+    pesho = aliasesArnList.split(' ')
     println pesho.getClass()
-    
-    println aliasesArnList
+
 
     currentBuild.result = 'ABORTED'
     error("This is just a test and very expected")
