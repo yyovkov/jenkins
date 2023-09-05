@@ -40,7 +40,7 @@ def call(body) {
         " GameLift aliases with name \"" + params.CUSTOMER + 
         "\" while exactly 1 expected"
     
-    if ((aliasesArnList.size() < 1) && (! params.CREATE_GAMLIFT_ALIAS)) {
+    if ((aliasesArnList.size() < 1) && (! params.CREATE_GAMELIFT_ALIAS)) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }

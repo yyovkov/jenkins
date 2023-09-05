@@ -1,11 +1,13 @@
 def call(Map conf) {
+    // Name: gameliftAliasUpdateFleet.groovy
+    // Update aleryd existing GameLift alias with provided leet_arn
 
-    env.ALIAS_AWS_REGION    = conf.aws_region
-    env.ALIAS_ID            = conf.alias_id
-    env.FLEET_ID            = conf.fleet_id
+    env.AWS_REGION  = conf.aws_region
+    env.ALIAS_ID    = conf.alias_id
+    env.FLEET_ID    = conf.fleet_id
 
     powershell '''
-        $cmdAliasUpdate = "& aws --region ${env:ALIAS_AWS_REGION}" + `
+        $cmdAliasUpdate = "& aws --region ${env:AWS_REGION}" + `
             " gamelift update-alias" + `
             " --alias-id `"${env:ALIAS_ID}`"" + `
             " --routing-stragegy=Type=SIMNPLE,FleetIid=${FLEET_ID}"
