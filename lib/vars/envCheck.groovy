@@ -15,8 +15,7 @@ def call(body) {
     }
 
     // TODO: Check if Alias exists
-    def aliasesArnList = []
-    aliasesArnList = powershell(returnStdout: true, script: '''
+    def aliasesArn = powershell(returnStdout: true, script: '''
         # $cmcAliasesList = "& aws --region ${env:UE5_AWS_REGION}" + `
         #    " gamelift list-aliases" + `
         #    " | ConvertFrom-Json"
@@ -71,16 +70,10 @@ def call(body) {
         Write-Output $aliasesArnList.
     ''')
 
+    def aliasesArnList = aliasesArnList.split('\n')
     println aliasesArnList.getClass()
+    println aliasesArnList.size
     println aliasesArnList
-
-    def pesho = []
-    pesho = aliasesArnList.split('\n')
-    println pesho.getClass()
-    println pesho[0]
-    println pesho[1]
-    println pesho[2]
-    println "List leng: "
 
     currentBuild.result = 'ABORTED'
     error("This is just a test and very expected")
