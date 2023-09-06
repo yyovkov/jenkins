@@ -8,7 +8,7 @@ def call(Map conf) {
 
     env.ALIAS_NAME = conf.alias_name
     env.AWS_REGION = conf.aws_region
-    env.FLEET_ARN  = conf.fleet_arn.split('/')[-1]
+    env.FLEET_ID   = conf.fleet_arn.split('/')[-1]
     env.TAGS       = conf.tags
 
     def aliaseArn = powershell(returnStdout: true, script: '''
