@@ -16,11 +16,16 @@ def call(Map conf) {
             " gamelift create-alias" + `
             " --name `"${env:ALIAS_NAME}`"" + `
             " --routing-strategy Type=SIMPLE,FleetId=`"${env:FLEET_ID}`"" + `
-            " --tags `"${env:TAGS}`""
+            " --tags `"${env:TAGS}`"" 
 
         Write-Host Create Alias command: $cmdAliasCreate
 
-        Invoke-Expression $cmdAliasCreate
+        $res = Invoke-Expression $cmdAliasCreate
+
+        $resJson = $res | ConvertFrom-Json
+        $aliasArn = $resJson.Alias.AliasArn
+
+        Write-Output $aliasArn
     '''
 
     return aliasArn.trim()
