@@ -39,6 +39,9 @@ def call(body) {
 
     def aliasesArnList = aliasesArn.split('\n')
 
+    println "Type of the array is: " + aliasesArnList.getClass()
+    println "The length of the array is" + aliasesArnList.length
+
     def error_message = "There are " + aliasesArnList.size() + 
         " GameLift aliases with name \"" + params.CUSTOMER + 
         "\" while exactly 1 expected"
