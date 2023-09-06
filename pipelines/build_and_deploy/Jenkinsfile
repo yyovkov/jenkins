@@ -315,7 +315,9 @@ pipeline {
 
                         stage('Create Alias') {
                             when {
-                                expression { allOf { params.CREATE_GAMELIFT_ALIAS; env.GAMELIFT_ALIAS_ARN != null }
+                                expression { allOf 
+                                    { params.CREATE_GAMELIFT_ALIAS; env.GAMELIFT_ALIAS_ARN != null }
+                                }
                             }
                             steps {
                                 withCredentials([aws(
