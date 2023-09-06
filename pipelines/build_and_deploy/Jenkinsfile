@@ -230,6 +230,8 @@ pipeline {
                                                     | Join-Path -ChildPath aws `
                                                     | Join-Path -ChildPath AWSHelper.exe
                                                 $cmdFleetCmd = "& $cleanFleetExe" + `
+                                                    " ${env:AWS_ACCESS_KEY_ID}" + ` 
+                                                    " ${env:AWS_SECRET_ACCESS_KEY}"  + `
                                                     " ${env:AWS_REGION}"
 
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
