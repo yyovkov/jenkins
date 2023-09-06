@@ -317,7 +317,7 @@ pipeline {
                             when { 
                                 allOf {
                                     expression { params.CREATE_GAMELIFT_ALIAS }
-                                    expression { env.GAMELIFT_ALIAS_ARN == null }
+                                    expression { ! env.GAMELIFT_ALIAS_ARN }
                                 }
                             }
                             steps {
