@@ -352,6 +352,7 @@ pipeline {
                     }
                     post {
                         always {
+                            // TODO: Delete also the build_id directory
                             echo "Cleanup artifactory directory"
                             dir("${env.GAMELIF_BUILD_FOLDER}") {
                                 deleteDir()
