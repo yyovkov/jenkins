@@ -80,7 +80,7 @@ pipeline {
                         case 'CC_Sales':
                             env.AWS_DEPLOY_CREDENTIALS = 'aws-gamelift-sand'
                             env.FLEETNAMEPART = 'Sales'
-                            env.INSTANCE_MANAGER_URL = 'https://inm-demo.dev.mytaverselabs.com/event/v2/publishSelfService'
+                            env.INSTANCE_MANAGER_URL = 'https://inm-tour.mytaverselabs.com/event/v2/publishSelfService'
                             env.SENTRY_URL = 'https://3e959cc9acd8d5e4a997e31340ae4107@o993426.ingest.sentry.io/4505664040927232'
                             break
                         default:
