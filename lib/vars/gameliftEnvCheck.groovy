@@ -37,10 +37,11 @@ def call(body) {
 
     println "String length: " + aliasesArn.length()
 
-    def aliasesArnList = aliasesArn.split('\n')
+    // def aliasesArnList = aliasesArn.split('\n')
+    def aliasesArnList = []
 
     println "Type of the array is: " + aliasesArnList.getClass()
-    println "The length of the array is" + aliasesArnList.length
+    println "The length of the array is: " + aliasesArnList.length
 
     def error_message = "There are " + aliasesArnList.size() + 
         " GameLift aliases with name \"" + params.CUSTOMER + 
