@@ -35,15 +35,7 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
-    println "String length: " + aliasesArn.length()
-
-    def aliasesArnList = []
-    if (aliasesArn.length() > 0) {
-        def aliasesArnList = aliasesArn.split('\n')
-    } 
-
-    println "Type of the array is: " + aliasesArnList.getClass()
-    println "The length of the array is: " + aliasesArnList.length
+    aliasesArnList = aliasesArn.tokenize('\n')
 
     def error_message = "There are " + aliasesArnList.size() + 
         " GameLift aliases with name \"" + params.CUSTOMER + 
@@ -58,9 +50,4 @@ def call(body) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
-
-    println "The number of aliases is: " + aliasesArnList.size()
-    println "The aliases is: " + aliasesArnList[0]
-    currentBuild.result = 'ABORTED'
-    error("Should not come to here. Should die earlier")
 }
