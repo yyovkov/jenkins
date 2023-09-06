@@ -17,6 +17,6 @@ def call(Map conf) {
 
         Write-Host Alias Update Command: $cmdAliasUpdate
 
-        Invoke-Expression $cmdAliasUpdate
+        $res = Invoke-Expression $cmdAliasUpdate
     '''
 }
