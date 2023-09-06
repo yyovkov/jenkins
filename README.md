@@ -34,7 +34,7 @@ export FOLDER_DESCRIPTION="Mytaverse Pipelines to build and deploy UE5"
 jenkins-cli create-job ${FOLDER_NAME} <<< $(envsubst < templates/pipeline/folder.xml)
 ```
 
-## Create Jenkins job from git
+## Create Jenkins Pipeline
 
 ### Setup variables
 
@@ -66,9 +66,9 @@ Where:
 jenkins-cli create-job ${JOB_FOLDER}/${JOB_NAME} <<< $(envsubst < templates/pipeline/job_git.xml)
 ```
 
-## Create Jenkins Credentials
+## Add Jenkins Credentials
 
-### AWS Credentials for GameLift deploy in Sandbox
+AWS Credentials for GameLift deploy in Sandbox
 
 * Setup variables
 
