@@ -31,6 +31,7 @@ def call(body) {
         | Select-Object -ExpandProperty Aliases `
         | Where-Object { $_.Name -eq "${env:UE5_ALIAS_NAME}" }).AliasArn
 
+        Write-Host Aliases are: $aliasesArnList
         Write-Output $aliasesArnList
     ''')
 
