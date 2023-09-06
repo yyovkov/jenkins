@@ -26,7 +26,7 @@ def call(Map conf) {
         $aliasArn = $resJson.Alias.AliasArn
 
         Write-Output $aliasArn
-    '''
+    ''')
 
     return aliasArn.trim()
 }
