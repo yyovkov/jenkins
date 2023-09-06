@@ -11,7 +11,7 @@ def call(Map conf) {
     env.FLEET_ID   = conf.fleet_arn.split('/')[-1]
     env.TAGS       = conf.tags
 
-    def aliaseArn = powershell(returnStdout: true, script: '''
+    def aliasArn = powershell(returnStdout: true, script: '''
         $cmdAliasCreate = "& aws --region `"${env:AWS_REGION}`"" + `
             " gamelift create-alias" + `
             " --name `"${env:ALIAS_NAME}`"" + `
