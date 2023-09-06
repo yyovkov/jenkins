@@ -349,6 +349,14 @@ pipeline {
                             }
                         }
                     }
+                    post {
+                        always {
+                            echo "Cleanup artifactory directory"
+                            dir("${env.GAMELIF_BUILD_FOLDER}") {
+                                deleteDir()
+                            }
+                        }
+                    }
                 }
 
                 stage('Client GameCast Build and Deploy') {
