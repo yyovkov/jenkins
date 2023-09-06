@@ -49,4 +49,7 @@ def call(body) {
         currentBuild.result = 'ABORTED'
         error(error_message)
     }
+
+    currentBuild.result = 'ABORTED'
+    error("Should not come to here. Should die earlier")
 }
