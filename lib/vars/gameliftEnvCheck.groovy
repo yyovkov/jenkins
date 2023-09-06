@@ -37,11 +37,10 @@ def call(body) {
 
     println "String length: " + aliasesArn.length()
 
+    def aliasesArnList = []
     if (aliasesArn.length() > 0) {
         def aliasesArnList = aliasesArn.split('\n')
-    } else {
-        def aliasesArnList = []
-    }
+    } 
 
     println "Type of the array is: " + aliasesArnList.getClass()
     println "The length of the array is: " + aliasesArnList.length
