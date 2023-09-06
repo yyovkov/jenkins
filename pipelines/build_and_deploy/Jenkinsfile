@@ -199,8 +199,7 @@ pipeline {
                         stage('Server GameLift Build') {
                             steps {
                                 dir("${env.PLASTICSCM_LOCAL_PATH}"){
-                                    // TODO: Uncomment for IN PRODUCTION
-                                    // gameliftBuild()
+                                    gameliftBuild()
                                 }
                             }
                         }
@@ -239,8 +238,7 @@ pipeline {
                                                     " ${env:AWS_REGION}"
 
                                                 Write-Host "Clean Fleets Command: $cmdFleetCmd"
-                                                # TODO: Uncomment for IN PRODUCTION
-                                                # Invoke-Expression $cmdFleetCm
+                                                Invoke-Expression $cmdFleetCm
                                             '''
                                         }
                                     }
@@ -255,17 +253,13 @@ pipeline {
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
 
                                     script {
-                                        // TODO: Remove for IN PRODUCTION
-                                        env.GAMELIFT_BUILD_ARN = "arn:aws:gamelift:us-east-2:748866342572:build/build-d5da9806-ed5e-4977-ae1e-b857c01f248c"
-
-                                        // TODO: Uncomment for IN PRODUCTION
-                                        // env.GAMELIFT_BUILD_ARN = gameliftDeploy(
-                                        //     buildName:      "${env.GAMELIFT_BUILD_NAME}", 
-                                        //     buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
-                                        //     buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
-                                        //     serverOS:       "${env.OPERATING_SYSTEM}",
-                                        //     awsRegion:      "${env.AWS_REGION}"
-                                        // )
+                                        env.GAMELIFT_BUILD_ARN = gameliftDeploy(
+                                            buildName:      "${env.GAMELIFT_BUILD_NAME}", 
+                                            buildVersion:   "${env.GAMELIFT_BUILD_VERSION}",
+                                            buildFolder:    "${env.GAMELIF_BUILD_FOLDER}",
+                                            serverOS:       "${env.OPERATING_SYSTEM}",
+                                            awsRegion:      "${env.AWS_REGION}"
+                                        )
 
                                         gameliftTagResources(
                                             resource_arn:   "${env.GAMELIFT_BUILD_ARN}",
@@ -294,18 +288,14 @@ pipeline {
                                         env.runTimeConfig = "ServerProcesses=${env._runtime_config}"
                                         echo "runTimeConfig: ${env.runTimeConfig}"
 
-                                        // TODO: Remove below for IN PRODUCTION
-                                        env.GAMELIFT_FLEET_ARN = "arn:aws:gamelift:us-east-2:748866342572:fleet/fleet-87b30805-4171-4d01-9956-c6af3b028ec6"
-
-                                        // TODO: Uncomment for IN PRODUCTION
-                                        // env.GAMELIFT_FLEET_ARN = gameliftCreateFleet(
-                                        //     awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
-                                        //     awsRegion:       "${env.AWS_REGION}",
-                                        //     buildArn:        "${env.GAMELIFT_BUILD_ARN}",
-                                        //     runTimeConfig:   "${env.runTimeConfig}",
-                                        //     fleetName:       "${env.GAMELIFT_FLEET_NAME}",
-                                        //     fleetTags:       "${env._TAGS}"
-                                        // )
+                                        env.GAMELIFT_FLEET_ARN = gameliftCreateFleet(
+                                            awsInstanceType: "${env.AWS_INSTANCE_TYPE}",
+                                            awsRegion:       "${env.AWS_REGION}",
+                                            buildArn:        "${env.GAMELIFT_BUILD_ARN}",
+                                            runTimeConfig:   "${env.runTimeConfig}",
+                                            fleetName:       "${env.GAMELIFT_FLEET_NAME}",
+                                            fleetTags:       "${env._TAGS}"
+                                        )
 
                                         echo "Gamelift Build Arn: ${env.GAMELIFT_FLEET_ARN}"
                                     }
