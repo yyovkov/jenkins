@@ -90,10 +90,6 @@ pipeline {
                             env.SENTRY_URL = 'not_setup'
                             break
                     }
-
-                    env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
-                    env.GAMELIFT_BUILD_NAME = "${env.CUSTOMER}-${env.GAMELIFT_BUILD_VERSION}-${env.FLEETNAMEPART}"
-                    env.GAMELIFT_FLEET_NAME = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-${env.MODEL_NAME}"
                 }
 
                 // TODO: Send slack notification
@@ -161,9 +157,14 @@ pipeline {
             }
         }
 
-        stage('Setup dynamic environment') {
+        stage('Setup environment variables') {
             steps {
                 script {
+                    // Setup variables
+                    env.GAMELIFT_BUILD_VERSION = "0.0.${env.BUILD_NUMBER}"
+                    env.GAMELIFT_BUILD_NAME = "${env.CUSTOMER}-${env.GAMELIFT_BUILD_VERSION}-${env.FLEETNAMEPART}"
+                    env.GAMELIFT_FLEET_NAME = "Myta5-${env.PLASTICSCM_CHANGESET_ID}-${env.FLEETNAMEPART}-${env.MODEL_NAME}"
+
                     // Setup default resource tags
                     env._TAGS_BUILD = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
                     env._TAGS_BUILD = "${env._TAGS_BUILD} \"Key=jenkins_build_url,Value=${env.BUILD_URL}\""
