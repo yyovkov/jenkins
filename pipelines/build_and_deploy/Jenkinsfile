@@ -164,8 +164,6 @@ pipeline {
         stage('Setup dynamic environment') {
             steps {
                 script {
-                    
-
                     // Setup default resource tags
                     env._TAGS_BUILD = "\"Key=jenkins_build_id,Value=${env:BUILD_ID}\""
                     env._TAGS_BUILD = "${env._TAGS_BUILD} \"Key=jenkins_build_url,Value=${env.BUILD_URL}\""
@@ -203,6 +201,7 @@ pipeline {
                                 }
                             }
                         }
+
                         stage('Copy Build to AWS Build folder') {
                             when {
                                 expression  {params.BUILD_LINUX_SERVER == false }
@@ -220,28 +219,7 @@ pipeline {
                                 '''
                             }
                         }
-                        stage('Clean Fleets'){
-                            steps {
-                                script {
-                                    withCredentials([aws( credentialsId: env.AWS_DEPLOY_CREDENTIALS)]) {
-                                        dir("${env.PLASTICSCM_LOCAL_PATH}") {
-                                            powershell '''
-                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
-                                                    | Join-Path -ChildPath aws `
-                                                    | Join-Path -ChildPath AWSHelper.exe
-                                                $cmdFleetCmd = "& $cleanFleetExe" + `
-                                                    " ${env:AWS_ACCESS_KEY_ID}" + ` 
-                                                    " ${env:AWS_SECRET_ACCESS_KEY}"  + `
-                                                    " ${env:AWS_REGION}"
 
-                                                Write-Host "Clean Fleets Command: $cmdFleetCmd"
-                                                Invoke-Expression $cmdFleetCm
-                                            '''
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         stage('Upload GameLift Build') {
                             steps {
                                 withCredentials([aws(
@@ -348,6 +326,28 @@ pipeline {
                                 )
                             }
                         }
+
+                        stage('Clean Fleets'){
+                            steps {
+                                script {
+                                    withCredentials([aws( credentialsId: env.AWS_DEPLOY_CREDENTIALS)]) {
+                                        dir("${env.PLASTICSCM_LOCAL_PATH}") {
+                                            powershell '''
+                                                $cleanFleetExe = Join-Path ${env:PLASTICSCM_LOCAL_PATH} Devops `
+                                                    | Join-Path -ChildPath aws `
+                                                    | Join-Path -ChildPath AWSHelper.exe
+                                                $cmdFleetCmd = "& $cleanFleetExe" + `
+                                                    " ${env:AWS_ACCESS_KEY_ID}" + ` 
+                                                    " ${env:AWS_SECRET_ACCESS_KEY}"  + `
+                                                    " ${env:AWS_REGION}"
+                                                Write-Host "Clean Fleets Command: $cmdFleetCmd"
+                                                Invoke-Expression $cmdFleetCm
+                                            '''
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -387,6 +387,7 @@ pipeline {
                                 purewebBuild()
                             }
                         }
+                        
                         stage('Client Pureweb Deploy') {
                             steps {
                                 purewebDeploy()
