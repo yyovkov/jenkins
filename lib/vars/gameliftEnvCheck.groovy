@@ -35,6 +35,8 @@ def call(body) {
         Write-Output $aliasesArnList
     ''')
 
+    println "String length: " + aliasesArn.length()
+
     def aliasesArnList = aliasesArn.split('\n')
 
     def error_message = "There are " + aliasesArnList.size() + 
