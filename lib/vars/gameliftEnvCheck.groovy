@@ -50,6 +50,7 @@ def call(body) {
         error(error_message)
     }
 
+    println "The number of aliases is: " + aliasesArnList.size()
     currentBuild.result = 'ABORTED'
     error("Should not come to here. Should die earlier")
 }
