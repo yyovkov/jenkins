@@ -14,8 +14,6 @@ def call(Map conf) {
     def fleetArn = powershell(returnStdout: true, script: '''
         $ErrorActionPreference = "Stop"
 
-        Write-Host Tags for Fleet are: ${env:UE5_FLEET_TAGS}
-
         $cmdCreateFleet = "& aws --region `"${env:UE5_AWS_REGION}`"" + `
             " gamelift create-fleet" + `
             " --name `"${env:UE5_FLEET_NAME}`"" + `
@@ -42,7 +40,7 @@ def call(Map conf) {
 
         while("True"){
             $fleet_status = (Invoke-Expression $cmdGetFleetStatus).FleetAttributes.Status
-            Write-Host Fleet status: $fleet_status. Next check in 60 sec.
+            Write-Host ("Fleet status: " + $fleet_status + ". Next check in 60 sec.")
             if ($fleetFinalStatuses.Contains($fleet_status)) {
                 if ($fleet_status.Equals("ACTIVE")) {
                     break
