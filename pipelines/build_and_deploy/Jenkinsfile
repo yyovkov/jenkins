@@ -145,7 +145,7 @@ pipeline {
                 }
                 stage('Get GameLift Alias ID') {
                     steps {
-                                withCredentials([aws(
+                            withCredentials([aws(
                                 credentialsId:     env.AWS_DEPLOY_CREDENTIALS,
                                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
@@ -315,7 +315,7 @@ pipeline {
 
                         stage('Create Alias') {
                             when {
-                                expression { params.CREATE_GAMELIFT_ALIAS == true }
+                                expression { params.CREATE_GAMELIFT_ALIAS }
                             }
                             steps {
                                 withCredentials([aws(
