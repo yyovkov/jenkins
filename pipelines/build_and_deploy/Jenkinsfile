@@ -318,13 +318,18 @@ pipeline {
                                 expression { params.CREATE_GAMELIFT_ALIAS == true }
                             }
                             steps {
-                                script {
-                                    env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
-                                        alias_name: "${env.GAMELIFT_ALIAS_NAME}",
-                                        aws_region: "${env.AWS_REGION}",
-                                        fleet_arn:  "${env.GAMELIFT_FLEET_ARN}",
-                                        tags:       "${env._TAGS_BUILD}"
-                                    )
+                                withCredentials([aws(
+                                        credentialsId: env.AWS_DEPLOY_CREDENTIALS,
+                                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+                                    script {
+                                        env.GAMELIFT_ALIAS_ARN = gameliftAliasCreate(
+                                            alias_name: "${env.GAMELIFT_ALIAS_NAME}",
+                                            aws_region: "${env.AWS_REGION}",
+                                            fleet_arn:  "${env.GAMELIFT_FLEET_ARN}",
+                                            tags:       "${env._TAGS_BUILD}"
+                                        )
+                                    }
                                 }
                             }
                         }
