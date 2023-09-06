@@ -3,8 +3,9 @@ def call(Map conf) {
     // Update aleryd existing GameLift alias with provided leet_arn
 
     env.AWS_REGION  = conf.aws_region
-    env.ALIAS_ID    = conf.alias_id.trim()
-    env.FLEET_ID    = conf.fleet_id.trim()
+    env.ALIAS_ID    = conf.alias_id
+    env.FLEET_ID    = conf.fleet_arn.split('/')[-1]
+
 
     powershell '''
         $cmdAliasUpdate = "& aws --region ${env:AWS_REGION}" + `

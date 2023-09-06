@@ -336,9 +336,9 @@ pipeline {
                                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
                                     gameliftAliasUpdateFleet(
-                                        alias_id:   "${env.GAMELIFT_ALIAS_ARN}",
+                                        alias_arn:   "${env.GAMELIFT_ALIAS_ARN}",
                                         aws_region: "${params.AWS_REGION}",
-                                        fleet_id:   "${env.GAMELIFT_FLEET_ARN}"
+                                        fleet_arn:   "${env.GAMELIFT_FLEET_ARN}"
                                     )
                                 }
                             }
