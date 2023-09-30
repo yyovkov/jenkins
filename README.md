@@ -4,7 +4,7 @@ This project contains jenkins code, used to manager UE5 builds and deployments
 
 ## Setup Library with Bitbucket branch
 
-aavigate to: `Manage Jenkins` --> `System` --> `Global Pipeline Libraries` and
+Navigate to: `Manage Jenkins` --> `System` --> `Global Pipeline Libraries` and
 fill bellow fields
 
 * **Library Name**: `mytaverse`
